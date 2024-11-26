@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -9,13 +10,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertCircle, Brain, Users, Zap } from 'lucide-react'
 
 export default function ResultsPage() {
-  const [replaceabilityScore] = useState(65) // This would typically come from your backend
+  const router = useRouter()
+  const [replaceabilityScore, setReplaceabilityScore] = useState<number | null>(null)
+
+  useEffect(() => {
+    // Get score from sessionStorage
+    const score = sessionStorage.getItem('aiScore')
+    if (!score) {
+      router.push('/assessment')
+      return
+    }
+    setReplaceabilityScore(Number(score))
+  }, [router])
+
+  // If score isn't loaded yet, show loading state
+  if (replaceabilityScore === null) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading Results...</h1>
+        </div>
+      </div>
+    )
+  }
 
   const factors = [
-    { name: 'Task Complexity', score: 70, icon: Brain },
-    { name: 'Human Interaction', score: 80, icon: Users },
-    { name: 'Use of Technology', score: 60, icon: Zap },
-    { name: 'Creativity', score: 50, icon: AlertCircle },
+    { name: 'Task Complexity', score: Math.min(100, replaceabilityScore + 5), icon: Brain },
+    { name: 'Human Interaction', score: Math.min(100, replaceabilityScore - 10), icon: Users },
+    { name: 'Use of Technology', score: Math.min(100, replaceabilityScore + 15), icon: Zap },
+    { name: 'Creativity', score: Math.min(100, replaceabilityScore - 5), icon: AlertCircle },
   ]
 
   return (
@@ -99,13 +122,18 @@ export default function ResultsPage() {
                 <CardDescription>What your replaceability score means for your career</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="mb-4">Your replaceability score of {replaceabilityScore}% indicates that your job has a {replaceabilityScore > 50 ? 'higher' : 'lower'} than average likelihood of being impacted by AI automation in the coming years. Here's what this means:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Tasks that are routine or predictable are more likely to be automated.</li>
-                  <li>Jobs requiring high levels of human interaction, creativity, or complex decision-making are generally less at risk.</li>
-                  <li>The pace of AI development means that the landscape is constantly changing, and today's assessment may differ from future realities.</li>
-                  <li>Regardless of your score, upskilling and staying informed about AI developments in your field is crucial.</li>
-                </ul>
+                <div className="space-y-4">
+                  <p>
+                    Your replaceability score of {replaceabilityScore}% indicates that your job has a {replaceabilityScore > 50 ? 'higher' : 'lower'} than average likelihood of being impacted by AI automation in the coming years.
+                  </p>
+                  <h3 className="font-semibold text-lg">Key Insights:</h3>
+                  <ul className="list-disc pl-6 space-y-2">
+                    <li>Tasks that are routine or predictable are more likely to be automated</li>
+                    <li>Jobs requiring high levels of human interaction, creativity, or complex decision-making are generally less at risk</li>
+                    <li>The pace of AI development means that the landscape is constantly changing</li>
+                    <li>Regardless of your score, upskilling and staying informed about AI developments in your field is crucial</li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

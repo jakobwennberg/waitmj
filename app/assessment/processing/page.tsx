@@ -26,11 +26,18 @@ export default function ProcessingScreen() {
 
   useEffect(() => {
     const score = searchParams.get('score')
+    if (!score) {
+      router.push('/assessment') // Redirect if no score
+      return
+    }
+
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         if (oldProgress === 100) {
           clearInterval(timer)
-          router.push(`/assessment/results?score=${score}`)
+          // Store score in sessionStorage before redirecting
+          sessionStorage.setItem('aiScore', score)
+          router.push('/assessment/results')
           return 100
         }
         const newProgress = Math.min(oldProgress + 10, 100)

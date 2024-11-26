@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,20 +9,77 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BookOpen, Briefcase, GraduationCap, Lightbulb, Zap } from 'lucide-react'
 
 export default function RecommendationsPage() {
-  const [replaceabilityScore] = useState(65) // This would typically come from your backend or state management
+  const router = useRouter()
+  const [replaceabilityScore, setReplaceabilityScore] = useState<number | null>(null)
 
+  useEffect(() => {
+    // Get score from sessionStorage
+    const score = sessionStorage.getItem('aiScore')
+    if (!score) {
+      router.push('/assessment')
+      return
+    }
+    setReplaceabilityScore(Number(score))
+  }, [router])
+
+  // If score isn't loaded yet, show loading state
+  if (replaceabilityScore === null) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-4">Loading Recommendations...</h1>
+        </div>
+      </div>
+    )
+  }
+
+  // Adjust recommendations based on score
   const skillRecommendations = [
-    { title: "Data Analysis", description: "Enhance your ability to interpret complex datasets and derive insights.", icon: Zap },
-    { title: "Machine Learning Basics", description: "Understand the fundamentals of AI and machine learning algorithms.", icon: Lightbulb },
-    { title: "Emotional Intelligence", description: "Develop skills in areas where humans still outperform AI, such as empathy and complex communication.", icon: BookOpen },
-    { title: "Creative Problem Solving", description: "Improve your ability to think outside the box and develop innovative solutions.", icon: GraduationCap },
+    {
+      title: replaceabilityScore > 70 ? "Advanced Data Analysis" : "Basic Data Analysis",
+      description: `${replaceabilityScore > 70 ? "Master" : "Enhance"} your ability to interpret complex datasets and derive insights.`,
+      icon: Zap
+    },
+    {
+      title: "AI Collaboration Skills",
+      description: "Learn to work effectively alongside AI tools and systems.",
+      icon: Lightbulb
+    },
+    {
+      title: "Emotional Intelligence",
+      description: "Develop skills in areas where humans still outperform AI, such as empathy and complex communication.",
+      icon: BookOpen
+    },
+    {
+      title: "Creative Problem Solving",
+      description: `${replaceabilityScore > 50 ? "Significantly improve" : "Enhance"} your ability to think outside the box and develop innovative solutions.`,
+      icon: GraduationCap
+    },
   ]
 
   const careerRecommendations = [
-    { title: "Upskill in Complementary Areas", description: "Identify and learn skills that complement AI rather than compete with it.", icon: Briefcase },
-    { title: "Specialize in Human-AI Collaboration", description: "Position yourself as an expert in leveraging AI tools to enhance human work.", icon: Zap },
-    { title: "Explore Emerging Fields", description: "Consider transitioning to fields that are growing due to AI advancements.", icon: Lightbulb },
-    { title: "Develop Your Personal Brand", description: "Highlight your unique human skills and experiences that set you apart from AI.", icon: GraduationCap },
+    {
+      title: "Upskill in Complementary Areas",
+      description: replaceabilityScore > 70 
+        ? "Urgently identify and learn skills that complement AI rather than compete with it"
+        : "Identify and learn skills that complement AI rather than compete with it",
+      icon: Briefcase
+    },
+    {
+      title: "Specialize in Human-AI Collaboration",
+      description: "Position yourself as an expert in leveraging AI tools to enhance human work.",
+      icon: Zap
+    },
+    {
+      title: "Explore Emerging Fields",
+      description: `${replaceabilityScore > 60 ? "Consider transitioning" : "Explore opportunities"} in fields that are growing due to AI advancements.`,
+      icon: Lightbulb
+    },
+    {
+      title: "Develop Your Personal Brand",
+      description: "Highlight your unique human skills and experiences that set you apart from AI.",
+      icon: GraduationCap
+    },
   ]
 
   return (
@@ -38,7 +96,9 @@ export default function RecommendationsPage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              With a replaceability score of {replaceabilityScore}%, it's {replaceabilityScore > 50 ? 'crucial' : 'beneficial'} to focus on developing skills that complement AI and position yourself for future opportunities.
+              With a replaceability score of {replaceabilityScore}%, it's 
+              {replaceabilityScore > 70 ? ' crucial ' : replaceabilityScore > 50 ? ' important ' : ' beneficial '}
+              to focus on developing skills that complement AI and position yourself for future opportunities.
             </p>
           </CardContent>
         </Card>
@@ -107,7 +167,7 @@ export default function RecommendationsPage() {
                 <Link href="/courses">Explore Recommended Courses</Link>
               </Button>
               <Button variant="outline" asChild className="flex-1">
-                <Link href="/courses?tab=resources">Browse Additional Resources</Link>
+                <Link href="/newsletter">Stay Updated</Link>
               </Button>
             </div>
           </CardContent>

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select"
 import { Slider } from '@/components/ui/slider'
 import { Progress } from '@/components/ui/progress'
+import { toast } from '@/hooks/use-toast'
 
 export default function AssessmentQuestionnaire() {
   const router = useRouter()
@@ -25,6 +26,7 @@ export default function AssessmentQuestionnaire() {
     yearsOfExperience: 0,
   })
   const [progress, setProgress] = useState(0)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleInputChange = (name: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -41,11 +43,66 @@ export default function AssessmentQuestionnaire() {
     setProgress((filledFields / Object.keys(formData).length) * 100)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const requiredFields = ['ageRange', 'educationLevel', 'industry', 'jobTitle']
+    const missingFields = requiredFields.filter(field => !formData[field])
+    
+    if (missingFields.length > 0) {
+      toast({
+        title: "Missing Required Fields",
+        description: `Please fill in: ${missingFields.join(', ')}`,
+        variant: "destructive",
+      })
+      return false
+    }
+    return true
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Here you would typically send the data to your backend
-    console.log(formData)
-    router.push('/assessment/job-analysis')
+    
+    if (!validateForm()) {
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/submit-assessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong')
+      }
+
+      if (data.success) {
+        // Store the initial assessment data in sessionStorage
+        sessionStorage.setItem('initialAssessment', JSON.stringify(formData))
+        router.push('/assessment/job-analysis')
+      } else {
+        toast({
+          title: "Error",
+          description: data.message || "Failed to submit assessment",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error('Error submitting assessment:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -53,7 +110,7 @@ export default function AssessmentQuestionnaire() {
       <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-primary mb-6 text-center">Professional Information</h1>
         <p className="text-muted-foreground mb-6 text-center">
-          Please provide some information about your professional background. This helps us tailor the assessment to your specific situation.
+          Please provide some information about your professional background.
         </p>
         <Progress value={progress} className="mb-6" />
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,11 +173,10 @@ export default function AssessmentQuestionnaire() {
           />
 
           <div>
-            <label htmlFor="yearsOfExperience" className="block text-sm font-medium text-muted-foreground mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Years of Experience: {formData.yearsOfExperience}
             </label>
             <Slider
-              id="yearsOfExperience"
               min={0}
               max={40}
               step={1}
@@ -129,12 +185,15 @@ export default function AssessmentQuestionnaire() {
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Next: Job Analysis
+          <Button 
+            type="submit" 
+            className="w-full" 
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Next: Job Analysis"}
           </Button>
         </form>
       </div>
     </div>
   )
 }
-
