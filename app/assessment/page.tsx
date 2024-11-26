@@ -14,6 +14,23 @@ import {
 import { Slider } from '@/components/ui/slider'
 import { Progress } from '@/components/ui/progress'
 import { toast } from '@/hooks/use-toast'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Label } from '@/components/ui/label'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { AlertCircle } from 'lucide-react'
+
+interface FormErrors {
+  ageRange?: string;
+  educationLevel?: string;
+  industry?: string;
+  jobTitle?: string;
+}
 
 export default function AssessmentQuestionnaire() {
   const router = useRouter()
@@ -27,10 +44,17 @@ export default function AssessmentQuestionnaire() {
   })
   const [progress, setProgress] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 
   const handleInputChange = (name: string, value: string | number) => {
     setFormData(prev => ({ ...prev, [name]: value }))
     updateProgress()
+    
+    // Clear error for this field if it exists
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }))
+    }
   }
 
   const handleSliderChange = (value: number[]) => {
@@ -39,29 +63,52 @@ export default function AssessmentQuestionnaire() {
   }
 
   const updateProgress = () => {
-    const filledFields = Object.values(formData).filter(Boolean).length
-    setProgress((filledFields / Object.keys(formData).length) * 100)
+    const requiredFields = ['ageRange', 'educationLevel', 'industry', 'jobTitle']
+    const filledRequiredFields = requiredFields.filter(field => formData[field as keyof typeof formData]).length
+    setProgress((filledRequiredFields / requiredFields.length) * 100)
   }
 
-  const validateForm = () => {
-    const requiredFields = ['ageRange', 'educationLevel', 'industry', 'jobTitle']
-    const missingFields = requiredFields.filter(field => !formData[field])
-    
-    if (missingFields.length > 0) {
-      toast({
-        title: "Missing Required Fields",
-        description: `Please fill in: ${missingFields.join(', ')}`,
-        variant: "destructive",
-      })
-      return false
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+    let isValid = true
+
+    if (!formData.ageRange) {
+      newErrors.ageRange = 'Please select your age range'
+      isValid = false
     }
-    return true
+
+    if (!formData.educationLevel) {
+      newErrors.educationLevel = 'Please select your education level'
+      isValid = false
+    }
+
+    if (!formData.industry) {
+      newErrors.industry = 'Please select your industry'
+      isValid = false
+    }
+
+    if (!formData.jobTitle) {
+      newErrors.jobTitle = 'Please enter your job title'
+      isValid = false
+    } else if (formData.jobTitle.length < 2) {
+      newErrors.jobTitle = 'Job title must be at least 2 characters long'
+      isValid = false
+    }
+
+    setErrors(newErrors)
+    return isValid
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setHasAttemptedSubmit(true)
     
     if (!validateForm()) {
+      toast({
+        title: "Form Validation Error",
+        description: "Please fill in all required fields correctly.",
+        variant: "destructive",
+      })
       return
     }
 
@@ -83,15 +130,10 @@ export default function AssessmentQuestionnaire() {
       }
 
       if (data.success) {
-        // Store the initial assessment data in sessionStorage
         sessionStorage.setItem('initialAssessment', JSON.stringify(formData))
         router.push('/assessment/job-analysis')
       } else {
-        toast({
-          title: "Error",
-          description: data.message || "Failed to submit assessment",
-          variant: "destructive",
-        })
+        throw new Error(data.message || "Failed to submit assessment")
       }
     } catch (error) {
       console.error('Error submitting assessment:', error)
@@ -106,94 +148,156 @@ export default function AssessmentQuestionnaire() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-primary mb-6 text-center">Professional Information</h1>
-        <p className="text-muted-foreground mb-6 text-center">
-          Please provide some information about your professional background.
-        </p>
-        <Progress value={progress} className="mb-6" />
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Select name="ageRange" onValueChange={(value) => handleInputChange('ageRange', value)} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Age Range" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="18-24">18-24</SelectItem>
-              <SelectItem value="25-34">25-34</SelectItem>
-              <SelectItem value="35-44">35-44</SelectItem>
-              <SelectItem value="45-54">45-54</SelectItem>
-              <SelectItem value="55+">55+</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="min-h-screen bg-background p-4">
+      <Card className="max-w-2xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-primary">Professional Information</CardTitle>
+          <CardDescription>
+            Please provide some information about your professional background.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {hasAttemptedSubmit && Object.keys(errors).length > 0 && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                Please correct the following errors:
+                <ul className="list-disc pl-4 mt-2">
+                  {Object.entries(errors).map(([field, error]) => (
+                    <li key={field}>{error}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
 
-          <Select name="gender" onValueChange={(value) => handleInputChange('gender', value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Gender (Optional)" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
-              <SelectItem value="non-binary">Non-binary</SelectItem>
-              <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
-            </SelectContent>
-          </Select>
+          <Progress value={progress} className="mb-6" />
+          
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="ageRange" className="required">Age Range</Label>
+              <Select 
+                name="ageRange" 
+                value={formData.ageRange}
+                onValueChange={(value) => handleInputChange('ageRange', value)}
+              >
+                <SelectTrigger className={errors.ageRange && hasAttemptedSubmit ? 'border-red-500' : ''}>
+                  <SelectValue placeholder="Select Age Range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="18-24">18-24</SelectItem>
+                  <SelectItem value="25-34">25-34</SelectItem>
+                  <SelectItem value="35-44">35-44</SelectItem>
+                  <SelectItem value="45-54">45-54</SelectItem>
+                  <SelectItem value="55+">55+</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.ageRange && hasAttemptedSubmit && (
+                <p className="text-sm text-red-500 mt-1">{errors.ageRange}</p>
+              )}
+            </div>
 
-          <Select name="educationLevel" onValueChange={(value) => handleInputChange('educationLevel', value)} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Education Level" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="high-school">High School</SelectItem>
-              <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
-              <SelectItem value="masters">Master's Degree</SelectItem>
-              <SelectItem value="phd">Ph.D. or Doctorate</SelectItem>
-            </SelectContent>
-          </Select>
+            <div className="space-y-2">
+              <Label htmlFor="gender">Gender (Optional)</Label>
+              <Select 
+                name="gender" 
+                value={formData.gender}
+                onValueChange={(value) => handleInputChange('gender', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Gender (Optional)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="non-binary">Non-binary</SelectItem>
+                  <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <Select name="industry" onValueChange={(value) => handleInputChange('industry', value)} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select Industry" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="technology">Technology</SelectItem>
-              <SelectItem value="healthcare">Healthcare</SelectItem>
-              <SelectItem value="finance">Finance</SelectItem>
-              <SelectItem value="education">Education</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+            <div className="space-y-2">
+              <Label htmlFor="educationLevel" className="required">Education Level</Label>
+              <Select 
+                name="educationLevel" 
+                value={formData.educationLevel}
+                onValueChange={(value) => handleInputChange('educationLevel', value)}
+              >
+                <SelectTrigger className={errors.educationLevel && hasAttemptedSubmit ? 'border-red-500' : ''}>
+                  <SelectValue placeholder="Select Education Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="high-school">High School</SelectItem>
+                  <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
+                  <SelectItem value="masters">Master's Degree</SelectItem>
+                  <SelectItem value="phd">Ph.D. or Doctorate</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.educationLevel && hasAttemptedSubmit && (
+                <p className="text-sm text-red-500 mt-1">{errors.educationLevel}</p>
+              )}
+            </div>
 
-          <Input
-            name="jobTitle"
-            value={formData.jobTitle}
-            onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-            placeholder="Your Job Title"
-            required
-          />
+            <div className="space-y-2">
+              <Label htmlFor="industry" className="required">Industry</Label>
+              <Select 
+                name="industry" 
+                value={formData.industry}
+                onValueChange={(value) => handleInputChange('industry', value)}
+              >
+                <SelectTrigger className={errors.industry && hasAttemptedSubmit ? 'border-red-500' : ''}>
+                  <SelectValue placeholder="Select Industry" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="technology">Technology</SelectItem>
+                  <SelectItem value="healthcare">Healthcare</SelectItem>
+                  <SelectItem value="finance">Finance</SelectItem>
+                  <SelectItem value="education">Education</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.industry && hasAttemptedSubmit && (
+                <p className="text-sm text-red-500 mt-1">{errors.industry}</p>
+              )}
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-muted-foreground mb-2">
-              Years of Experience: {formData.yearsOfExperience}
-            </label>
-            <Slider
-              min={0}
-              max={40}
-              step={1}
-              value={[formData.yearsOfExperience]}
-              onValueChange={handleSliderChange}
-            />
-          </div>
+            <div className="space-y-2">
+              <Label htmlFor="jobTitle" className="required">Job Title</Label>
+              <Input
+                id="jobTitle"
+                name="jobTitle"
+                value={formData.jobTitle}
+                onChange={(e) => handleInputChange('jobTitle', e.target.value)}
+                placeholder="Your Job Title"
+                className={errors.jobTitle && hasAttemptedSubmit ? 'border-red-500' : ''}
+              />
+              {errors.jobTitle && hasAttemptedSubmit && (
+                <p className="text-sm text-red-500 mt-1">{errors.jobTitle}</p>
+              )}
+            </div>
 
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Next: Job Analysis"}
-          </Button>
-        </form>
-      </div>
+            <div className="space-y-2">
+              <Label htmlFor="yearsOfExperience">Years of Experience: {formData.yearsOfExperience}</Label>
+              <Slider
+                id="yearsOfExperience"
+                min={0}
+                max={40}
+                step={1}
+                value={[formData.yearsOfExperience]}
+                onValueChange={handleSliderChange}
+              />
+            </div>
+
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Next: Job Analysis"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   )
 }
