@@ -1,6 +1,8 @@
+// app/submit-assessment/route.ts
+import { calculateInitialScore } from '@/lib/scorecalculations'
 import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
-// Define the expected shape of the assessment data
 interface AssessmentData {
   ageRange: string
   gender?: string
@@ -12,28 +14,33 @@ interface AssessmentData {
 
 export async function POST(request: Request) {
   try {
-    // Parse and validate the incoming data
     const assessmentData: AssessmentData = await request.json()
     
-    // Validate required fields
-    const requiredFields = ['ageRange', 'educationLevel', 'industry', 'jobTitle']
-    const missingFields = requiredFields.filter(field => !assessmentData[field])
-    
-    if (missingFields.length > 0) {
-      return NextResponse.json({
-        success: false,
-        message: `Missing required fields: ${missingFields.join(', ')}`,
-      }, { status: 400 })
+    // Transform the data to match your database schema
+    const dbData = {
+      age_range: assessmentData.ageRange,
+      gender: assessmentData.gender,
+      education_level: assessmentData.educationLevel,
+      industry: assessmentData.industry,
+      job_title: assessmentData.jobTitle,
+      years_of_exp: assessmentData.yearsOfExperience,
+      initial_score: calculateInitialScore(assessmentData) // Your existing calculation
     }
 
-    // Store the data (in a real app, you'd save this to a database)
-    // For now, we'll just generate an initial score based on the data
-    const initialScore = calculateInitialScore(assessmentData)
+    // Insert into Supabase
+    const { data, error } = await supabase
+      .from('assessments')
+      .insert(dbData)
+      .select()
+      .single()
+
+    if (error) throw error
 
     return NextResponse.json({
       success: true,
       message: 'Assessment submitted successfully',
-      score: initialScore,
+      score: data.initial_score,
+      assessmentId: data.id // Important: You'll need this for job analysis
     }, { status: 200 })
 
   } catch (error) {
@@ -43,23 +50,4 @@ export async function POST(request: Request) {
       message: 'Error processing assessment',
     }, { status: 500 })
   }
-}
-
-function calculateInitialScore(data: AssessmentData): number {
-  let score = 50 // Base score
-
-  // Adjust score based on education level
-  const educationScores = {
-    'high-school': 0,
-    'bachelors': -5,
-    'masters': -10,
-    'phd': -15,
-  }
-  score += educationScores[data.educationLevel] || 0
-
-  // Adjust for years of experience
-  score -= Math.min(data.yearsOfExperience, 20) / 2
-
-  // Ensure score stays within 0-100 range
-  return Math.max(0, Math.min(100, score))
 }

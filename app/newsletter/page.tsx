@@ -28,15 +28,41 @@ export default function NewsletterSignup() {
     }
 
     setIsLoading(true)
-    // Here you would typically send the data to your backend
-    await new Promise(resolve => setTimeout(resolve, 1000)) // Simulating API call
-    setIsLoading(false)
-
-    toast({
-      title: "Success!",
-      description: "You've been subscribed to our newsletter.",
-    })
-    router.push('/thank-you')
+    try {
+      const response = await fetch('/api/submit-newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          consent
+        })
+      })
+  
+      const data = await response.json()
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to subscribe')
+      }
+  
+      if (data.success) {
+        toast({
+          title: "Success!",
+          description: "You've been subscribed to our newsletter.",
+        })
+        router.push('/thank-you')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (

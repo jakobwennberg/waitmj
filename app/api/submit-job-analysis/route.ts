@@ -1,4 +1,6 @@
+import { calculateFinalScore } from '@/lib/scorecalculations'
 import { NextResponse } from 'next/server'
+import { supabase } from '@/lib/supabase'
 
 interface JobAnalysisData {
   complexTasks: string
@@ -6,30 +8,45 @@ interface JobAnalysisData {
   toolsUsed: string[]
   creativityLevel: number
   decisionMaking: number
+  assessmentId: string
 }
 
 export async function POST(request: Request) {
   try {
     const jobData: JobAnalysisData = await request.json()
-    
-    // Validate required fields
-    const requiredFields = ['complexTasks', 'humanInteraction', 'toolsUsed', 'creativityLevel', 'decisionMaking']
-    const missingFields = requiredFields.filter(field => !jobData[field] && jobData[field] !== 0)
-    
-    if (missingFields.length > 0) {
+
+    // Verify assessment ID exists
+    if (!jobData.assessmentId) {
       return NextResponse.json({
         success: false,
-        message: `Missing required fields: ${missingFields.join(', ')}`,
+        message: 'Assessment ID is required',
       }, { status: 400 })
     }
+    
+    // Transform the data to match your database schema
+    const dbData = {
+      assessment_id: jobData.assessmentId,
+      complex_tasks: jobData.complexTasks,
+      human_interaction: jobData.humanInteraction,
+      tools_used: jobData.toolsUsed,
+      creativity_level: jobData.creativityLevel,
+      decision_making: jobData.decisionMaking,
+      final_score: calculateFinalScore(jobData) // Your existing calculation
+    }
 
-    // Calculate final score combining initial assessment and job analysis
-    const finalScore = calculateFinalScore(jobData)
+    // Insert into Supabase
+    const { data, error } = await supabase
+      .from('job_analyses')
+      .insert(dbData)
+      .select()
+      .single()
+
+    if (error) throw error
 
     return NextResponse.json({
       success: true,
       message: 'Job analysis submitted successfully',
-      score: finalScore,
+      score: data.final_score
     }, { status: 200 })
 
   } catch (error) {
@@ -39,23 +56,4 @@ export async function POST(request: Request) {
       message: 'Error processing job analysis',
     }, { status: 500 })
   }
-}
-
-function calculateFinalScore(data: JobAnalysisData): number {
-  let score = 50 // Base score
-
-  // Adjust for human interaction
-  score -= data.humanInteraction * 2
-
-  // Adjust for creativity
-  score -= data.creativityLevel * 2
-
-  // Adjust for decision making complexity
-  score -= data.decisionMaking * 2
-
-  // Adjust for number of tools used
-  score += data.toolsUsed.length * 3
-
-  // Ensure score stays within 0-100 range
-  return Math.max(0, Math.min(100, score))
 }

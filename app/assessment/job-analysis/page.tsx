@@ -105,38 +105,44 @@ export default function JobAnalysisQuestionnaire() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setHasAttemptedSubmit(true)
     
-    if (!validateForm()) {
+    // Get the assessment ID from sessionStorage
+    const assessmentId = sessionStorage.getItem('assessmentId')
+    
+    if (!assessmentId) {
       toast({
-        title: "Form Validation Error",
-        description: "Please fill in all required fields correctly.",
+        title: "Error",
+        description: "Assessment ID not found. Please start over.",
         variant: "destructive",
       })
+      router.push('/assessment')
       return
     }
 
     setIsSubmitting(true)
 
     try {
+      const submissionData = {
+        ...formData,
+        assessmentId  // Include the assessment ID here
+      }
+
       const response = await fetch('/api/submit-job-analysis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(submissionData),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || 'Something went wrong')
+        throw new Error(data.message || 'Failed to submit job analysis')
       }
 
       if (data.success) {
         router.push(`/assessment/processing?score=${data.score}`)
-      } else {
-        throw new Error(data.message || "Failed to submit job analysis")
       }
     } catch (error) {
       console.error('Error submitting job analysis:', error)

@@ -130,7 +130,7 @@ export default function AssessmentQuestionnaire() {
       }
 
       if (data.success) {
-        sessionStorage.setItem('initialAssessment', JSON.stringify(formData))
+        sessionStorage.setItem('assessmentId', data.assessmentId)
         router.push('/assessment/job-analysis')
       } else {
         throw new Error(data.message || "Failed to submit assessment")
