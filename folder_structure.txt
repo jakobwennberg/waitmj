@@ -1,0 +1,566 @@
+.
+├── .DS_Store
+├── .env.local
+├── .eslintrc.json
+├── .git
+│   ├── COMMIT_EDITMSG
+│   ├── FETCH_HEAD
+│   ├── HEAD
+│   ├── ORIG_HEAD
+│   ├── config
+│   ├── description
+│   ├── hooks
+│   │   ├── applypatch-msg.sample
+│   │   ├── commit-msg.sample
+│   │   ├── fsmonitor-watchman.sample
+│   │   ├── post-update.sample
+│   │   ├── pre-applypatch.sample
+│   │   ├── pre-commit.sample
+│   │   ├── pre-merge-commit.sample
+│   │   ├── pre-push.sample
+│   │   ├── pre-rebase.sample
+│   │   ├── pre-receive.sample
+│   │   ├── prepare-commit-msg.sample
+│   │   ├── push-to-checkout.sample
+│   │   └── update.sample
+│   ├── index
+│   ├── info
+│   │   └── exclude
+│   ├── logs
+│   │   ├── HEAD
+│   │   └── refs
+│   │       ├── heads
+│   │       │   └── main
+│   │       └── remotes
+│   │           └── origin
+│   │               └── main
+│   ├── objects
+│   │   ├── 00
+│   │   │   ├── e80e3816ca6f5f026dcececd3787390d8741c4
+│   │   │   └── fa504e0601411d7402fd60f602ba1ea8f3da7a
+│   │   ├── 02
+│   │   │   └── e111d81dd774038ac483c11b5f5a8f8aceb024
+│   │   ├── 03
+│   │   │   ├── 2392869e3e9286638d91c8c41dd48a8c9a2a27
+│   │   │   └── 74b39787ccee895413410791a848513687d356
+│   │   ├── 04
+│   │   │   └── 69297a0f3bf74c121e807073404af725846cd4
+│   │   ├── 0c
+│   │   │   ├── bf77d15a58d50d81e3976596064cdfb61337b1
+│   │   │   └── d9b4e653ff66f1f4553b781c5cc5ad97ea5a66
+│   │   ├── 0f
+│   │   │   └── 4caebb1170ec24e5acab012544ccedb09b15a2
+│   │   ├── 12
+│   │   │   ├── 23d6f4eb3f3d12289e178d338f9e382e51d9ed
+│   │   │   └── e14a0e32667a6ac4c0e2703cfaf6492185edd3
+│   │   ├── 13
+│   │   │   └── d40b892057e0e4271c5c8f9fc8db30e80f2409
+│   │   ├── 14
+│   │   │   └── c78fc3e1e8a910fd608549aded0a22a15ceedc
+│   │   ├── 15
+│   │   │   └── d680fe1837830c5e3856d7cfdfabded39ff6c0
+│   │   ├── 16
+│   │   │   └── 9fc3a552586f96215c0437ede4f4fefcc8e443
+│   │   ├── 19
+│   │   │   └── b50770fe4f9b9efa50bae0679af50a1dc5b42b
+│   │   ├── 1a
+│   │   │   └── 69fd2a450afc3bf47e08b22c149190df0ffdb4
+│   │   ├── 1b
+│   │   │   ├── 62daacff96dad6584e71cd962051b82957c313
+│   │   │   └── dc1d66ab5752bb8929bbb4ca0daee1df5f30da
+│   │   ├── 1d
+│   │   │   └── cb0fc6d6cb577257bae10ea509e64cd4c5361b
+│   │   ├── 20
+│   │   │   └── f7985d1c6f2ece0ee5c3a94a0220792f53fd1b
+│   │   ├── 21
+│   │   │   ├── 85cf0c31ba4881055f636a32272c26d0d0019e
+│   │   │   └── b21a5b4e8d4829ae1ab289447abe91edcbb12a
+│   │   ├── 27
+│   │   │   └── 2cb721eb48b7a5833ccd51f940a8830d85b64e
+│   │   ├── 28
+│   │   │   └── b4d86d74ec78aff493bffc8f777bf55a211ecd
+│   │   ├── 2b
+│   │   │   └── 746bae8578815100cb738d3035cdfdfd5deaf6
+│   │   ├── 2f
+│   │   │   └── 55a32f4d374342e6aa22e0fee985e9e60c1a3c
+│   │   ├── 36
+│   │   │   └── 91a46a5faed36f681d262214fe9eda5c2dc486
+│   │   ├── 37
+│   │   │   ├── 224185490e6db2d26a574d66d4d476336bf644
+│   │   │   └── 565168ac1745041534cff07e4e3520ceed3551
+│   │   ├── 3e
+│   │   │   └── d0bb80f9fc800105669711fa41584e7277adc2
+│   │   ├── 42
+│   │   │   └── 0d6beab28649cf7320eead5b08a153c73283a8
+│   │   ├── 43
+│   │   │   └── 3c8aa7fd7326ea27e55ea52d384e84e7164fc8
+│   │   ├── 46
+│   │   │   └── 78774e6d606704bce1897a5dab960cd798bf66
+│   │   ├── 47
+│   │   │   ├── 4dc1513ad0d784adfdf2c4cdff076a88dc84de
+│   │   │   └── 7be8dbdf8b498a6324eef176a72bc58e1ffe40
+│   │   ├── 49
+│   │   │   ├── b4ecd760b1b03f5f377832fa2e3eabbcc3227c
+│   │   │   └── f9155cbb01da2ebedf994d3c7b8d8bd2eed0ec
+│   │   ├── 4f
+│   │   │   ├── aea7682dca4dbffed1b88d97cea7c38bf73650
+│   │   │   └── c3b473e6f51afa972f840fb0f4476f8663c256
+│   │   ├── 50
+│   │   │   ├── 121eb6678c711d9d733f575e50caa9a7ecdb92
+│   │   │   └── 1356120c60f1b9965896a3fd2f6746b4022788
+│   │   ├── 51
+│   │   │   ├── 99cfb172c3617303fdc281d1135af229e2790a
+│   │   │   └── e507ba9d08bcdbb1fb630498f1cbdf2bf50093
+│   │   ├── 52
+│   │   │   └── b950325c2df0bf4f3796f8e4fc962ce04c7476
+│   │   ├── 53
+│   │   │   └── 4182176bf87f9308355514adc884d2b69750a5
+│   │   ├── 57
+│   │   │   ├── a583061c0e301903d503cb3780c95e976e596e
+│   │   │   └── df6ac4c35c42ad75366b42b62d6714ad6fd9f5
+│   │   ├── 59
+│   │   │   └── b4df23fd520c3d70fb6ae47a947ded8697d202
+│   │   ├── 5b
+│   │   │   └── 769ed2afdf060e010e6f88a5eb61c9d08e8bd2
+│   │   ├── 63
+│   │   │   └── 9516eab4d2f5b263c04905d85ef2a1bfdf0e68
+│   │   ├── 65
+│   │   │   ├── d4fcd9ca74240125c5f72cf84c873781141fea
+│   │   │   └── e72070441f00e384d7a1395492ddbe2f575a8d
+│   │   ├── 67
+│   │   │   ├── 54c51dd2c78a9e61c283865ae2d82ecfebc3fd
+│   │   │   └── a3039400206798f7904b1eeab53ee37e09237e
+│   │   ├── 68
+│   │   │   └── c4bfc4a14c702cec216d36121be2aaf11c03c2
+│   │   ├── 69
+│   │   │   └── b64fb2455114c3eeda2d18741af0027b3c5e89
+│   │   ├── 70
+│   │   │   └── 6a998363a351f521b6bd9a2a08ff2a91523649
+│   │   ├── 71
+│   │   │   └── 8d6fea4835ec2d246af9800eddb7ffb276240c
+│   │   ├── 76
+│   │   │   ├── 2bc6389899873d91edfa2044573e3ae20143f6
+│   │   │   └── b460e631c9563f957c4427378a6b920d1c11db
+│   │   ├── 7c
+│   │   │   └── cc91ab8b0bf8db6e3db534b38d71f8d1d146dd
+│   │   ├── 80
+│   │   │   └── 87ca25985756f7982ef686bee52e4b7d0c878a
+│   │   ├── 85
+│   │   │   └── 84296d45341c0597b6fb20e83b48d820847598
+│   │   ├── 86
+│   │   │   └── cf4ad36b5e9c039caf674d189dac22b1cc5035
+│   │   ├── 88
+│   │   │   ├── 31f78c105ff1d2a2bb2b0cb9fab1ea97b7347e
+│   │   │   └── 70a62c7907bc28274f86d356baa45f6784976e
+│   │   ├── 89
+│   │   │   └── bf627a4f28cab0cf07db6a2fa5cb9106baa552
+│   │   ├── 8f
+│   │   │   └── 8d2cabe6a4bc65b680bce3dd031348a0e61132
+│   │   ├── 90
+│   │   │   └── 4313347490614953481c94b4c629e97b8f8382
+│   │   ├── 91
+│   │   │   └── 628d10109622ccfd795d1a46b576aa361af4d6
+│   │   ├── 95
+│   │   │   └── b386ad2102a2816fef1a90ab10c33c1c11d8e1
+│   │   ├── 9b
+│   │   │   └── f29cb0d99e20164c03b3ddefab7347127b2d50
+│   │   ├── 9e
+│   │   │   ├── e34875ee73d1e0261eb3e5f09ed8784af5fb88
+│   │   │   └── eec509f29194578d3693f8047bf69282262300
+│   │   ├── 9f
+│   │   │   └── 1e9ed5999a193f7667a8b85b0fd555c9c7931f
+│   │   ├── a3
+│   │   │   └── 6cde01c60b91e16e4c976d00546686e2d4e470
+│   │   ├── a4
+│   │   │   └── 9a41ce85910e40c0c1f607c13dff229667665b
+│   │   ├── a6
+│   │   │   └── 6b3f22019c44e790760ecd218c288eac2af7eb
+│   │   ├── ab
+│   │   │   └── 19d576f0013b65004f5f5f39e0bfad584a08fa
+│   │   ├── ac
+│   │   │   ├── 5985ac4b1140876b3e3a2cc1b0f648818faf07
+│   │   │   └── 7531fc64a166a363fcd64ab05c3f6cdf385067
+│   │   ├── b0
+│   │   │   └── c38dc66c060eaeb37129826ee28ef17b4ec235
+│   │   ├── b5
+│   │   │   └── a356741fcbb0e0eddadebe3537909a682235a1
+│   │   ├── b6
+│   │   │   └── 4f03cac38671bb202d4ca7e1aad5bcb1425900
+│   │   ├── b9
+│   │   │   └── 8fdeb9aaa19dc8a89b31d621a566cb33cc8ce0
+│   │   ├── bd
+│   │   │   ├── 0c391ddd1088e9067844c48835bf4abcd61783
+│   │   │   └── 5b7d7733ebe38a7b5ad253dad13fe6d0889c82
+│   │   ├── bf
+│   │   │   └── e6891d09487ce0755b8a6a7348f6260af45f90
+│   │   ├── c2
+│   │   │   └── 5f2ff4ffb29d129d80cda6031c7b2b4e7ebcd6
+│   │   ├── c6
+│   │   │   ├── 58bc9ecd5ca3743a7f2af73e3cb200880e4ca9
+│   │   │   └── fdd071b5d4133824ae4d805a3034132830a1b2
+│   │   ├── c9
+│   │   │   └── d01403d430d6488151a043a2900df16ed34bea
+│   │   ├── ca
+│   │   │   └── bfbfc59d955db9efc2049783cad4a71db55442
+│   │   ├── cb
+│   │   │   └── 5aa1bf204585ca30a244e3763c7407e2d76f7f
+│   │   ├── cd
+│   │   │   └── 87766990197174f1ced009cb8fdb528a75e5d2
+│   │   ├── cf
+│   │   │   └── 2fa98fe303f04c71a14acd45d2aee5c8e3ebc1
+│   │   ├── d1
+│   │   │   ├── 35e2b0ab2faf9e7591dbb67e87e8d6404478db
+│   │   │   └── d741fa996c5bbaa1df39bde579aeb94d566f97
+│   │   ├── d2
+│   │   │   └── 9d4b7042c941bf615d616e45558379af62b54a
+│   │   ├── d3
+│   │   │   └── 1cdb65bfa42c502c77dd260996fdbaf1a9bfbc
+│   │   ├── d4
+│   │   │   ├── 0b55fd0de069a4c31877e349ead0b185935d68
+│   │   │   ├── 3da912d03f9355f1cf2a863c83d092d9b82797
+│   │   │   └── ee66daf90c1e6b5ab6ddfeed706c9d6b33fd5e
+│   │   ├── d7
+│   │   │   └── 438b58cb03469b850ee109be6707e7a7345e15
+│   │   ├── db
+│   │   │   ├── 24f8e649c1a5be43aa534c9700256bcebc211b
+│   │   │   └── 8b81b105091ea1def089ab784335f863cd2a6b
+│   │   ├── dd
+│   │   │   └── d7374ecaf004e73d2e9c12957dae0887c1ea97
+│   │   ├── de
+│   │   │   ├── 761e19965a322c9d27ad77bdacff05bcdb318a
+│   │   │   ├── 99997c1d15bd49ec680d1273800da86f35dc3a
+│   │   │   └── a737b85e7fd14f03adb24139b52825dffcf853
+│   │   ├── df
+│   │   │   └── 4a429377aa902faa8ad61e9b77c0a3f0a26838
+│   │   ├── e2
+│   │   │   ├── 15bc4ccf138bbc38ad58ad57e92135484b3c0f
+│   │   │   └── 722f1149feaa1d2530155a2a9e87295a513ee8
+│   │   ├── e5
+│   │   │   └── 6b0affd7e03bd8359092a81d81c606ab09972d
+│   │   ├── e7
+│   │   │   └── ff90fd2767199e09b281bfa87e08a90f33270e
+│   │   ├── e8
+│   │   │   ├── 7d62bf1a2b2a0e1cf0b0dc94c2836525f40b67
+│   │   │   ├── 8e79ec6bb0890f5323e78925a20f397b4dd855
+│   │   │   └── b3cc876f9ce61819dd0a4e8c60d2c70ea92525
+│   │   ├── ec
+│   │   │   └── a0c677a6cb4ab5a18e4440e546088d7470567f
+│   │   ├── ee
+│   │   │   └── b0b1055a45d9cb79949c18d9b4d61a81926719
+│   │   ├── ef
+│   │   │   └── b935b2f39c1060f46b8798ffc60682c020a6bc
+│   │   ├── f0
+│   │   │   └── 4459e57bc6cab735716c70e1cdfcb0e445575d
+│   │   ├── f2
+│   │   │   └── ae185cbfd16946a534d819e9eb03924abbcc49
+│   │   ├── f4
+│   │   │   ├── 8717464f7c7109a27d7a8085b4df1fe0f874bb
+│   │   │   └── d63ef357eee9a6f3737117a7744504dc2d6966
+│   │   ├── f5
+│   │   │   ├── a684ae9c5640f27619546bba2e9ee79225d943
+│   │   │   └── daa2ccee05c02b3c2277dae6c41233a2faf888
+│   │   ├── f7
+│   │   │   └── d5dfaaf12001c80ec18598fc2a8897a0fc8439
+│   │   ├── fc
+│   │   │   ├── 218ce3a7ee118273709d075ffe4264d61d4d02
+│   │   │   └── b741a341df889205f9868e01cdef51cc530ae9
+│   │   ├── fd
+│   │   │   └── 3dbb571a12a1c3baf000db049e141c888d05a8
+│   │   ├── ff
+│   │   │   ├── 937c8da0671d49b8f7983279de91aebdffd89f
+│   │   │   └── 97f5edba266a362dacb58353e5ed569250bd4f
+│   │   ├── info
+│   │   └── pack
+│   └── refs
+│       ├── heads
+│       │   └── main
+│       ├── remotes
+│       │   └── origin
+│       │       └── main
+│       └── tags
+├── .gitignore
+├── .next
+│   ├── app-build-manifest.json
+│   ├── build-manifest.json
+│   ├── cache
+│   │   ├── swc
+│   │   │   └── plugins
+│   │   │       └── v7_macos_aarch64_0.106.15
+│   │   └── webpack
+│   │       ├── client-development
+│   │       │   ├── 0.pack.gz
+│   │       │   ├── 1.pack.gz
+│   │       │   ├── 10.pack.gz
+│   │       │   ├── 11.pack.gz
+│   │       │   ├── 12.pack.gz
+│   │       │   ├── 13.pack.gz
+│   │       │   ├── 14.pack.gz
+│   │       │   ├── 15.pack.gz
+│   │       │   ├── 16.pack.gz
+│   │       │   ├── 2.pack.gz
+│   │       │   ├── 3.pack.gz
+│   │       │   ├── 4.pack.gz
+│   │       │   ├── 5.pack.gz
+│   │       │   ├── 6.pack.gz
+│   │       │   ├── 7.pack.gz
+│   │       │   ├── 8.pack.gz
+│   │       │   ├── 9.pack.gz
+│   │       │   ├── index.pack.gz
+│   │       │   └── index.pack.gz.old
+│   │       ├── client-development-fallback
+│   │       │   ├── 0.pack.gz
+│   │       │   ├── index.pack.gz
+│   │       │   └── index.pack.gz.old
+│   │       └── server-development
+│   │           ├── 0.pack.gz
+│   │           ├── 1.pack.gz
+│   │           ├── 10.pack.gz
+│   │           ├── 11.pack.gz
+│   │           ├── 12.pack.gz
+│   │           ├── 13.pack.gz
+│   │           ├── 14.pack.gz
+│   │           ├── 15.pack.gz
+│   │           ├── 16.pack.gz
+│   │           ├── 17.pack.gz
+│   │           ├── 18.pack.gz
+│   │           ├── 19.pack.gz
+│   │           ├── 2.pack.gz
+│   │           ├── 3.pack.gz
+│   │           ├── 4.pack.gz
+│   │           ├── 5.pack.gz
+│   │           ├── 6.pack.gz
+│   │           ├── 7.pack.gz
+│   │           ├── 8.pack.gz
+│   │           ├── 9.pack.gz
+│   │           ├── index.pack.gz
+│   │           └── index.pack.gz.old
+│   ├── package.json
+│   ├── react-loadable-manifest.json
+│   ├── server
+│   │   ├── _32c4-_66e9.js
+│   │   ├── app
+│   │   │   ├── api
+│   │   │   │   ├── submit-assessment
+│   │   │   │   │   └── route.js
+│   │   │   │   ├── submit-job-analysis
+│   │   │   │   │   └── route.js
+│   │   │   │   └── submit-newsletter
+│   │   │   │       └── route.js
+│   │   │   ├── assessment
+│   │   │   │   ├── job-analysis
+│   │   │   │   │   ├── page.js
+│   │   │   │   │   └── page_client-reference-manifest.js
+│   │   │   │   ├── page.js
+│   │   │   │   ├── page_client-reference-manifest.js
+│   │   │   │   ├── processing
+│   │   │   │   │   ├── page.js
+│   │   │   │   │   └── page_client-reference-manifest.js
+│   │   │   │   ├── recommendations
+│   │   │   │   │   ├── page.js
+│   │   │   │   │   └── page_client-reference-manifest.js
+│   │   │   │   └── results
+│   │   │   │       ├── page.js
+│   │   │   │       └── page_client-reference-manifest.js
+│   │   │   ├── favicon.ico
+│   │   │   │   └── route.js
+│   │   │   ├── newsletter
+│   │   │   │   ├── page.js
+│   │   │   │   └── page_client-reference-manifest.js
+│   │   │   ├── page.js
+│   │   │   ├── page_client-reference-manifest.js
+│   │   │   └── thank-you
+│   │   │       ├── page.js
+│   │   │       └── page_client-reference-manifest.js
+│   │   ├── app-paths-manifest.json
+│   │   ├── interception-route-rewrite-manifest.js
+│   │   ├── middleware-build-manifest.js
+│   │   ├── middleware-manifest.json
+│   │   ├── middleware-react-loadable-manifest.js
+│   │   ├── next-font-manifest.js
+│   │   ├── next-font-manifest.json
+│   │   ├── pages-manifest.json
+│   │   ├── server-reference-manifest.js
+│   │   ├── server-reference-manifest.json
+│   │   ├── vendor-chunks
+│   │   │   ├── @floating-ui.js
+│   │   │   ├── @radix-ui.js
+│   │   │   ├── @supabase.js
+│   │   │   ├── @swc.js
+│   │   │   ├── aria-hidden.js
+│   │   │   ├── class-variance-authority.js
+│   │   │   ├── clsx.js
+│   │   │   ├── get-nonce.js
+│   │   │   ├── lucide-react.js
+│   │   │   ├── next.js
+│   │   │   ├── react-remove-scroll-bar.js
+│   │   │   ├── react-remove-scroll.js
+│   │   │   ├── react-style-singleton.js
+│   │   │   ├── tailwind-merge.js
+│   │   │   ├── tr46.js
+│   │   │   ├── tslib.js
+│   │   │   ├── use-callback-ref.js
+│   │   │   ├── use-sidecar.js
+│   │   │   ├── webidl-conversions.js
+│   │   │   ├── whatwg-url.js
+│   │   │   └── ws.js
+│   │   └── webpack-runtime.js
+│   ├── static
+│   │   ├── chunks
+│   │   │   ├── app
+│   │   │   │   ├── assessment
+│   │   │   │   │   ├── job-analysis
+│   │   │   │   │   │   └── page.js
+│   │   │   │   │   ├── page.js
+│   │   │   │   │   ├── processing
+│   │   │   │   │   │   └── page.js
+│   │   │   │   │   ├── recommendations
+│   │   │   │   │   │   └── page.js
+│   │   │   │   │   └── results
+│   │   │   │   │       └── page.js
+│   │   │   │   ├── layout.js
+│   │   │   │   ├── newsletter
+│   │   │   │   │   └── page.js
+│   │   │   │   ├── page.js
+│   │   │   │   └── thank-you
+│   │   │   │       └── page.js
+│   │   │   ├── app-pages-internals.js
+│   │   │   ├── main-app.js
+│   │   │   ├── polyfills.js
+│   │   │   └── webpack.js
+│   │   ├── css
+│   │   │   └── app
+│   │   │       └── layout.css
+│   │   ├── development
+│   │   │   ├── _buildManifest.js
+│   │   │   └── _ssgManifest.js
+│   │   ├── media
+│   │   │   ├── 4473ecc91f70f139-s.p.woff
+│   │   │   └── 463dafcda517f24f-s.p.woff
+│   │   └── webpack
+│   │       ├── 3b190ae6b97772db.webpack.hot-update.json
+│   │       ├── 51445d0e027502ac.webpack.hot-update.json
+│   │       ├── 633457081244afec._.hot-update.json
+│   │       ├── 76c554b26ed9927f.webpack.hot-update.json
+│   │       ├── 82e5084bc32bf978.webpack.hot-update.json
+│   │       ├── 9199c8604a31989d.webpack.hot-update.json
+│   │       ├── app
+│   │       │   └── layout.d2ff3a4b632755b9.hot-update.js
+│   │       ├── bd0789c95bf33e29.webpack.hot-update.json
+│   │       ├── d2ff3a4b632755b9.webpack.hot-update.json
+│   │       ├── e07e8c0fec648303.webpack.hot-update.json
+│   │       ├── webpack.3b190ae6b97772db.hot-update.js
+│   │       ├── webpack.51445d0e027502ac.hot-update.js
+│   │       ├── webpack.76c554b26ed9927f.hot-update.js
+│   │       ├── webpack.82e5084bc32bf978.hot-update.js
+│   │       ├── webpack.9199c8604a31989d.hot-update.js
+│   │       ├── webpack.bd0789c95bf33e29.hot-update.js
+│   │       ├── webpack.d2ff3a4b632755b9.hot-update.js
+│   │       └── webpack.e07e8c0fec648303.hot-update.js
+│   ├── trace
+│   └── types
+│       ├── app
+│       │   ├── api
+│       │   │   ├── submit-assessment
+│       │   │   │   └── route.ts
+│       │   │   ├── submit-job-analysis
+│       │   │   │   └── route.ts
+│       │   │   └── submit-newsletter
+│       │   │       └── route.ts
+│       │   ├── assessment
+│       │   │   ├── job-analysis
+│       │   │   │   └── page.ts
+│       │   │   ├── page.ts
+│       │   │   ├── processing
+│       │   │   │   └── page.ts
+│       │   │   ├── recommendations
+│       │   │   │   └── page.ts
+│       │   │   └── results
+│       │   │       └── page.ts
+│       │   ├── layout.ts
+│       │   ├── newsletter
+│       │   │   └── page.ts
+│       │   ├── page.ts
+│       │   └── thank-you
+│       │       └── page.ts
+│       └── package.json
+├── README.md
+├── app
+│   ├── .DS_Store
+│   ├── about
+│   │   └── page.tsx
+│   ├── api
+│   │   ├── .DS_Store
+│   │   ├── submit-assessment
+│   │   │   └── route.ts
+│   │   ├── submit-job-analysis
+│   │   │   └── route.ts
+│   │   └── submit-newsletter
+│   │       └── route.ts
+│   ├── assessment
+│   │   ├── .DS_Store
+│   │   ├── job-analysis
+│   │   │   └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── processing
+│   │   │   └── page.tsx
+│   │   ├── recommendations
+│   │   │   └── page.tsx
+│   │   └── results
+│   │       └── page.tsx
+│   ├── contact
+│   │   └── page.tsx
+│   ├── courses
+│   │   └── page.tsx
+│   ├── favicon.ico
+│   ├── fonts
+│   │   ├── GeistMonoVF.woff
+│   │   └── GeistVF.woff
+│   ├── globals.css
+│   ├── how-it-works
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   ├── newsletter
+│   │   └── page.tsx
+│   ├── page.tsx
+│   ├── testimonials
+│   │   └── page.tsx
+│   └── thank-you
+│       └── page.tsx
+├── components
+│   ├── .DS_Store
+│   ├── footer.tsx
+│   ├── header.tsx
+│   └── ui
+│       ├── accordion.tsx
+│       ├── alert.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── checkbox.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── progress.tsx
+│       ├── select.tsx
+│       ├── sheet.tsx
+│       ├── slider.tsx
+│       ├── tabs.tsx
+│       ├── textarea.tsx
+│       └── tooltip.tsx
+├── components.json
+├── folder_structure.txt
+├── hooks
+│   └── use-toast.ts
+├── lib
+│   ├── scorecalculations.ts
+│   ├── supabase.ts
+│   └── utils.ts
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── tailwind.config.ts
+└── tsconfig.json
+
+192 directories, 372 files

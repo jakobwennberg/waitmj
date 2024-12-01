@@ -34,6 +34,8 @@ export default function JobAnalysisQuestionnaire() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [complexityScore, setComplexityScore] = useState<number | null>(null);
 
   const tools = [
     { id: 'word-processing', label: 'Word Processing' },
@@ -103,58 +105,92 @@ export default function JobAnalysisQuestionnaire() {
     return isValid
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    // Get the assessment ID from sessionStorage
-    const assessmentId = sessionStorage.getItem('assessmentId')
-    
-    if (!assessmentId) {
+  const analyzeTaskComplexity = async (description: string) => {
+    setIsAnalyzing(true);
+    try {
+      const response = await fetch('/api/analyze-task-complexity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskDescription: description }),
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.error || 'Error analyzing task complexity');
+      }
+  
+      setComplexityScore(data.complexityScore);
+      return data.complexityScore;
+    } catch (error) {
+      console.error('Error:', error);
       toast({
         title: "Error",
-        description: "Assessment ID not found. Please start over.",
+        description: "Failed to analyze task complexity. Using default scoring.",
         variant: "destructive",
-      })
-      router.push('/assessment')
-      return
+      });
+      return null;
+    } finally {
+      setIsAnalyzing(false);
     }
+  };
 
-    setIsSubmitting(true)
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setHasAttemptedSubmit(true);
+    
+    if (!validateForm()) {
+      toast({
+        title: "Form Validation Error",
+        description: "Please fill in all required fields correctly.",
+        variant: "destructive",
+      });
+      return;
+    }
+  
+    setIsSubmitting(true);
+  
     try {
+      // First, analyze task complexity
+      const taskScore = await analyzeTaskComplexity(formData.complexTasks);
+      
+      // Prepare submission data with AI-analyzed complexity score
       const submissionData = {
         ...formData,
-        assessmentId  // Include the assessment ID here
-      }
-
+        assessmentId: sessionStorage.getItem('assessmentId'),
+        taskComplexityScore: taskScore
+      };
+  
       const response = await fetch('/api/submit-job-analysis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(submissionData),
-      })
-
-      const data = await response.json()
-
+      });
+  
+      const data = await response.json();
+  
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to submit job analysis')
+        throw new Error(data.message || 'Failed to submit job analysis');
       }
-
+  
       if (data.success) {
-        router.push(`/assessment/processing?score=${data.score}`)
+        router.push(`/assessment/processing?score=${data.score}`);
       }
     } catch (error) {
-      console.error('Error submitting job analysis:', error)
+      console.error('Error submitting job analysis:', error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background p-4">
@@ -183,21 +219,31 @@ export default function JobAnalysisQuestionnaire() {
           <Progress value={progress} className="mb-6" />
           
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="complexTasks" className="required">
-                Describe the most complex tasks you perform in your role:
-              </Label>
-              <Textarea
-                id="complexTasks"
-                value={formData.complexTasks}
-                onChange={(e) => handleInputChange('complexTasks', e.target.value)}
-                placeholder="E.g., Analyzing large datasets to identify market trends..."
-                className={errors.complexTasks && hasAttemptedSubmit ? 'border-red-500' : ''}
-              />
-              {errors.complexTasks && hasAttemptedSubmit && (
-                <p className="text-sm text-red-500 mt-1">{errors.complexTasks}</p>
-              )}
-            </div>
+          <div className="space-y-2">
+  <Label htmlFor="complexTasks" className="required">
+    Describe the most complex tasks you perform in your role:
+  </Label>
+  <Textarea
+    id="complexTasks"
+    value={formData.complexTasks}
+    onChange={(e) => handleInputChange('complexTasks', e.target.value)}
+    placeholder="E.g., Analyzing large datasets to identify market trends..."
+    className={errors.complexTasks && hasAttemptedSubmit ? 'border-red-500' : ''}
+  />
+  {isAnalyzing && (
+    <p className="text-sm text-muted-foreground">
+      Analyzing task complexity...
+    </p>
+  )}
+  {complexityScore && (
+    <p className="text-sm text-muted-foreground">
+      Task Complexity Score: {complexityScore}
+    </p>
+  )}
+  {errors.complexTasks && hasAttemptedSubmit && (
+    <p className="text-sm text-red-500 mt-1">{errors.complexTasks}</p>
+  )}
+</div>
 
             <div className="space-y-2">
               <Label>Rate the level of human interaction in your job:</Label>

@@ -8,6 +8,7 @@ interface JobAnalysisData {
   toolsUsed: string[]
   creativityLevel: number
   decisionMaking: number
+  taskComplexityScore : number
   assessmentId: string
 }
 
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
       tools_used: jobData.toolsUsed,
       creativity_level: jobData.creativityLevel,
       decision_making: jobData.decisionMaking,
+      ai_complexity_score: jobData.taskComplexityScore,
       final_score: calculateFinalScore(jobData) // Your existing calculation
     }
 
