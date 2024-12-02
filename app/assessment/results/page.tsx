@@ -7,20 +7,66 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AlertCircle, Brain, Users, Zap } from 'lucide-react'
+import { AlertCircle, Brain, Users, Zap, ShieldAlert, Lightbulb, ChevronRight } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+
+interface Recommendations {
+  strengths: string[];
+  risks: string[];
+  recommendations: string[];
+}
 
 export default function ResultsPage() {
   const router = useRouter()
   const [replaceabilityScore, setReplaceabilityScore] = useState<number | null>(null)
+  const [recommendations, setRecommendations] = useState<Recommendations | null>(null)
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false)
 
   useEffect(() => {
     // Get score from sessionStorage
     const score = sessionStorage.getItem('aiScore')
-    if (!score) {
+    const assessmentId = sessionStorage.getItem('assessmentId')
+    
+    if (!score || !assessmentId) {
       router.push('/assessment')
       return
     }
     setReplaceabilityScore(Number(score))
+    
+    // Fetch AI recommendations
+    const fetchRecommendations = async () => {
+      setIsLoadingRecommendations(true)
+      try {
+        const response = await fetch('/api/analyze-recommendations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ assessmentId }),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Failed to get recommendations')
+        }
+
+        if (data.success) {
+          setRecommendations(data.recommendations)
+        }
+      } catch (error) {
+        console.error('Error:', error)
+        toast({
+          title: "Error",
+          description: "Failed to load recommendations. Please try again later.",
+          variant: "destructive",
+        })
+      } finally {
+        setIsLoadingRecommendations(false)
+      }
+    }
+
+    fetchRecommendations()
   }, [router])
 
   // If score isn't loaded yet, show loading state
@@ -139,16 +185,107 @@ export default function ResultsPage() {
           </TabsContent>
         </Tabs>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <Tabs defaultValue="recommendations" className="mb-8">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="strengths">Your Strengths</TabsTrigger>
+            <TabsTrigger value="risks">Potential Risks</TabsTrigger>
+            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="strengths">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5" />
+                  Professional Strengths
+                </CardTitle>
+                <CardDescription>
+                  Key areas where you demonstrate strong capabilities
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoadingRecommendations ? (
+                  <p className="text-muted-foreground">Analyzing your strengths...</p>
+                ) : (
+                  <ul className="space-y-4">
+                    {recommendations?.strengths.map((strength, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <ChevronRight className="h-5 w-5 text-primary mt-0.5" />
+                        <span>{strength}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="risks">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShieldAlert className="h-5 w-5" />
+                  Potential AI Impact
+                </CardTitle>
+                <CardDescription>
+                  Areas where AI might affect your role
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoadingRecommendations ? (
+                  <p className="text-muted-foreground">Analyzing potential risks...</p>
+                ) : (
+                  <ul className="space-y-4">
+                    {recommendations?.risks.map((risk, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <ChevronRight className="h-5 w-5 text-primary mt-0.5" />
+                        <span>{risk}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="recommendations">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5" />
+                  Personalized Recommendations
+                </CardTitle>
+                <CardDescription>
+                  Action steps to enhance your career resilience
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoadingRecommendations ? (
+                  <p className="text-muted-foreground">Generating personalized recommendations...</p>
+                ) : (
+                  <ul className="space-y-4">
+                    {recommendations?.recommendations.map((recommendation, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <ChevronRight className="h-5 w-5 text-primary mt-0.5" />
+                        <span>{recommendation}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+        <div className="flex gap-4 justify-center">
           <Button asChild>
-            <Link href="/assessment/recommendations">View Personalized Recommendations</Link>
+            <Link href="/courses">Explore Recommended Courses</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/newsletter">Stay Updated with Our Newsletter</Link>
+            <Link href="/newsletter">Stay Updated</Link>
           </Button>
         </div>
       </div>
     </div>
   )
 }
-
