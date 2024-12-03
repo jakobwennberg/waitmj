@@ -1,7 +1,7 @@
-// app/submit-assessment/route.ts
-import { calculateInitialScore } from '@/lib/scorecalculations'
+// app/api/submit-assessment/route.ts
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { calculateInitialScore } from '@/lib/scorecalculations'
 
 interface AssessmentData {
   ageRange: string
@@ -9,12 +9,20 @@ interface AssessmentData {
   educationLevel: string
   industry: string
   jobTitle: string
-  yearsOfExperience: number
 }
 
 export async function POST(request: Request) {
   try {
     const assessmentData: AssessmentData = await request.json()
+    
+    // Initial validation
+    if (!assessmentData.ageRange || !assessmentData.educationLevel || 
+        !assessmentData.industry || !assessmentData.jobTitle) {
+      return NextResponse.json({
+        success: false,
+        message: 'Missing required fields'
+      }, { status: 400 })
+    }
     
     // Transform the data to match your database schema
     const dbData = {
@@ -23,8 +31,8 @@ export async function POST(request: Request) {
       education_level: assessmentData.educationLevel,
       industry: assessmentData.industry,
       job_title: assessmentData.jobTitle,
-      years_of_exp: assessmentData.yearsOfExperience,
-      initial_score: calculateInitialScore(assessmentData) // Your existing calculation
+      initial_score: calculateInitialScore(assessmentData),
+      created_at: new Date().toISOString()
     }
 
     // Insert into Supabase
@@ -34,13 +42,15 @@ export async function POST(request: Request) {
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('Supabase error:', error)
+      throw error
+    }
 
     return NextResponse.json({
       success: true,
       message: 'Assessment submitted successfully',
-      score: data.initial_score,
-      assessmentId: data.id // Important: You'll need this for job analysis
+      assessmentId: data.id
     }, { status: 200 })
 
   } catch (error) {

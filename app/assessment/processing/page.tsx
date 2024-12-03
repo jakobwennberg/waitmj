@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
 const facts = [
@@ -18,56 +19,75 @@ const facts = [
   "AI-driven personalization is revolutionizing the e-commerce experience."
 ]
 
-export default function ProcessingScreen() {
+export default function ProcessingPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [progress, setProgress] = useState(0)
   const [factIndex, setFactIndex] = useState(0)
+  const [isAnalyzing, setIsAnalyzing] = useState(true)
 
   useEffect(() => {
-    const score = searchParams.get('score')
-    if (!score) {
-      router.push('/assessment') // Redirect if no score
-      return
+    let progressTimer: NodeJS.Timeout
+    let factTimer: NodeJS.Timeout
+
+    const startAnalysis = () => {
+      progressTimer = setInterval(() => {
+        setProgress(oldProgress => {
+          if (oldProgress === 100) {
+            clearInterval(progressTimer)
+            // Navigate to results page after a short delay
+            setTimeout(() => {
+              router.push('/assessment/results')
+            }, 500)
+            return 100
+          }
+          return Math.min(oldProgress + 5, 100)
+        })
+      }, 300)
+
+      factTimer = setInterval(() => {
+        setFactIndex(oldIndex => (oldIndex + 1) % facts.length)
+      }, 3000)
     }
 
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          clearInterval(timer)
-          // Store score in sessionStorage before redirecting
-          sessionStorage.setItem('aiScore', score)
-          router.push('/assessment/results')
-          return 100
-        }
-        const newProgress = Math.min(oldProgress + 10, 100)
-        setFactIndex((oldIndex) => (oldIndex + 1) % facts.length)
-        return newProgress
-      })
-    }, 1000)
+    startAnalysis()
 
-    return () => clearInterval(timer)
-  }, [router, searchParams])
+    // Cleanup
+    return () => {
+      clearInterval(progressTimer)
+      clearInterval(factTimer)
+    }
+  }, [router])
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md text-center">
-        <h1 className="text-3xl font-bold text-primary mb-6">Analyzing Your Responses</h1>
-        <div className="flex items-center justify-center mb-6">
-          <Loader2 className="mr-2 h-8 w-8 animate-spin text-primary" />
-          <p className="text-lg text-muted-foreground">
-            Calculating your AI Replaceability Score...
+    <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+      <Card className="max-w-2xl w-full">
+        <CardHeader className="text-center">
+          <CardTitle>Analyzing Your Responses</CardTitle>
+          <CardDescription>
+            Please wait while we process your answers and calculate your AI Replaceability Score.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex flex-col items-center space-y-4">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <Progress value={progress} className="w-full" />
+            <p className="text-sm text-muted-foreground">
+              {progress}% complete
+            </p>
+          </div>
+
+          <div className="bg-muted rounded-lg p-4">
+            <h3 className="font-semibold mb-2">Did you know?</h3>
+            <p className="text-sm text-muted-foreground">
+              {facts[factIndex]}
+            </p>
+          </div>
+
+          <p className="text-xs text-center text-muted-foreground">
+            This may take a few moments. We're thoroughly analyzing your responses to provide accurate insights.
           </p>
-        </div>
-        <Progress value={progress} className="mb-6" />
-        <div className="bg-muted p-4 rounded-lg mb-6">
-          <h2 className="text-xl font-semibold mb-2">Did you know?</h2>
-          <p className="text-muted-foreground">{facts[factIndex]}</p>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          This may take a few moments. We're thoroughly analyzing your responses to provide accurate insights.
-        </p>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

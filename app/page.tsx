@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import TestimonialsSection from '@/components/TestimonialsSection'
+import CompanyLogosSection from '@/components/CompanyLogosSection'
+
 
 export default function LandingPage() {
   return (
@@ -29,10 +32,12 @@ export default function LandingPage() {
         <p className="mt-4 text-sm text-muted-foreground">
           Your privacy is our priority. All data is securely processed and never shared.
         </p>
+        <CompanyLogosSection />
+        <TestimonialsSection />
       </main>
 
       <footer className="py-6 px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
-        <p>&copy; 2023 WAITMJ. All rights reserved.</p>
+        <p>&copy; 2024 WAITMJ. All rights reserved.</p>
       </footer>
     </div>
   )

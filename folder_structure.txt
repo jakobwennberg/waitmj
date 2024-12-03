@@ -45,15 +45,20 @@
 │   │   │   └── 74b39787ccee895413410791a848513687d356
 │   │   ├── 04
 │   │   │   └── 69297a0f3bf74c121e807073404af725846cd4
+│   │   ├── 09
+│   │   │   └── cf927d04a2d92f2fd3287a4149fb9d0a507573
 │   │   ├── 0c
 │   │   │   ├── bf77d15a58d50d81e3976596064cdfb61337b1
 │   │   │   └── d9b4e653ff66f1f4553b781c5cc5ad97ea5a66
 │   │   ├── 0f
 │   │   │   └── 4caebb1170ec24e5acab012544ccedb09b15a2
+│   │   ├── 10
+│   │   │   └── bd10e08e038bbef7f2217b07590535e9f91a0e
 │   │   ├── 12
 │   │   │   ├── 23d6f4eb3f3d12289e178d338f9e382e51d9ed
 │   │   │   └── e14a0e32667a6ac4c0e2703cfaf6492185edd3
 │   │   ├── 13
+│   │   │   ├── 655de45685f87276465ed6155b59310c8c1ca9
 │   │   │   └── d40b892057e0e4271c5c8f9fc8db30e80f2409
 │   │   ├── 14
 │   │   │   └── c78fc3e1e8a910fd608549aded0a22a15ceedc
@@ -81,13 +86,16 @@
 │   │   │   └── b4d86d74ec78aff493bffc8f777bf55a211ecd
 │   │   ├── 2b
 │   │   │   └── 746bae8578815100cb738d3035cdfdfd5deaf6
+│   │   ├── 2e
+│   │   │   └── 19a3d2d8bd972b116a3e8f24058958348f0797
 │   │   ├── 2f
 │   │   │   └── 55a32f4d374342e6aa22e0fee985e9e60c1a3c
 │   │   ├── 36
 │   │   │   └── 91a46a5faed36f681d262214fe9eda5c2dc486
 │   │   ├── 37
 │   │   │   ├── 224185490e6db2d26a574d66d4d476336bf644
-│   │   │   └── 565168ac1745041534cff07e4e3520ceed3551
+│   │   │   ├── 565168ac1745041534cff07e4e3520ceed3551
+│   │   │   └── a609eb6efb75052cc28df166db9b982103090e
 │   │   ├── 3e
 │   │   │   └── d0bb80f9fc800105669711fa41584e7277adc2
 │   │   ├── 42
@@ -102,6 +110,10 @@
 │   │   ├── 49
 │   │   │   ├── b4ecd760b1b03f5f377832fa2e3eabbcc3227c
 │   │   │   └── f9155cbb01da2ebedf994d3c7b8d8bd2eed0ec
+│   │   ├── 4b
+│   │   │   └── f5d163ebbe6474ece2b86342fa9d24ee9ea44e
+│   │   ├── 4e
+│   │   │   └── 2054c8df59fbe66a725c30456049ee3ffb9ceb
 │   │   ├── 4f
 │   │   │   ├── aea7682dca4dbffed1b88d97cea7c38bf73650
 │   │   │   └── c3b473e6f51afa972f840fb0f4476f8663c256
@@ -115,6 +127,10 @@
 │   │   │   └── b950325c2df0bf4f3796f8e4fc962ce04c7476
 │   │   ├── 53
 │   │   │   └── 4182176bf87f9308355514adc884d2b69750a5
+│   │   ├── 54
+│   │   │   └── 703d4e5d6784ff088ae4e1ba32feea3d6a1a59
+│   │   ├── 56
+│   │   │   └── 9ea01ee491c8c62887b2aa36c4c0d653f5075f
 │   │   ├── 57
 │   │   │   ├── a583061c0e301903d503cb3780c95e976e596e
 │   │   │   └── df6ac4c35c42ad75366b42b62d6714ad6fd9f5
@@ -128,16 +144,21 @@
 │   │   │   ├── d4fcd9ca74240125c5f72cf84c873781141fea
 │   │   │   └── e72070441f00e384d7a1395492ddbe2f575a8d
 │   │   ├── 67
+│   │   │   ├── 3b107745ec2ff15951f4b0c71683aa45a3b76d
 │   │   │   ├── 54c51dd2c78a9e61c283865ae2d82ecfebc3fd
 │   │   │   └── a3039400206798f7904b1eeab53ee37e09237e
 │   │   ├── 68
 │   │   │   └── c4bfc4a14c702cec216d36121be2aaf11c03c2
 │   │   ├── 69
 │   │   │   └── b64fb2455114c3eeda2d18741af0027b3c5e89
+│   │   ├── 6d
+│   │   │   └── ff0a703de6e8c00927be2dbfedbdda67d787c0
 │   │   ├── 70
 │   │   │   └── 6a998363a351f521b6bd9a2a08ff2a91523649
 │   │   ├── 71
 │   │   │   └── 8d6fea4835ec2d246af9800eddb7ffb276240c
+│   │   ├── 74
+│   │   │   └── cae1baa36248bd2df8050cbd4df1f91d91b035
 │   │   ├── 76
 │   │   │   ├── 2bc6389899873d91edfa2044573e3ae20143f6
 │   │   │   └── b460e631c9563f957c4427378a6b920d1c11db
@@ -160,8 +181,12 @@
 │   │   │   └── 4313347490614953481c94b4c629e97b8f8382
 │   │   ├── 91
 │   │   │   └── 628d10109622ccfd795d1a46b576aa361af4d6
+│   │   ├── 94
+│   │   │   └── 861416c009541a753c3a64dc937e204425369f
 │   │   ├── 95
 │   │   │   └── b386ad2102a2816fef1a90ab10c33c1c11d8e1
+│   │   ├── 9a
+│   │   │   └── cf3ad2f885daf3a45b78cbb7d55c4f62e1c998
 │   │   ├── 9b
 │   │   │   └── f29cb0d99e20164c03b3ddefab7347127b2d50
 │   │   ├── 9e
@@ -182,22 +207,35 @@
 │   │   │   └── 7531fc64a166a363fcd64ab05c3f6cdf385067
 │   │   ├── b0
 │   │   │   └── c38dc66c060eaeb37129826ee28ef17b4ec235
+│   │   ├── b2
+│   │   │   └── cd581ae3dfba2183b7b4c957182e512dbf3ee9
+│   │   ├── b3
+│   │   │   └── ddddd924992aa6b041ea129c9e212c9ca92a0d
 │   │   ├── b5
 │   │   │   └── a356741fcbb0e0eddadebe3537909a682235a1
 │   │   ├── b6
+│   │   │   ├── 1a361112588465ccb10bd8f143b99601cb3e84
 │   │   │   └── 4f03cac38671bb202d4ca7e1aad5bcb1425900
 │   │   ├── b9
 │   │   │   └── 8fdeb9aaa19dc8a89b31d621a566cb33cc8ce0
+│   │   ├── ba
+│   │   │   └── 9a0d6163e3cc3669a3ac94999e0658026b7433
 │   │   ├── bd
 │   │   │   ├── 0c391ddd1088e9067844c48835bf4abcd61783
 │   │   │   └── 5b7d7733ebe38a7b5ad253dad13fe6d0889c82
+│   │   ├── be
+│   │   │   └── e12d6e4abd3e956e4ca1586b9978668baf1262
 │   │   ├── bf
 │   │   │   └── e6891d09487ce0755b8a6a7348f6260af45f90
 │   │   ├── c2
 │   │   │   └── 5f2ff4ffb29d129d80cda6031c7b2b4e7ebcd6
+│   │   ├── c5
+│   │   │   ├── c2042fa32e434d08757bd85c23f80522331a04
+│   │   │   └── f6d374131aff1a22eee976c66c7cffdcddf73b
 │   │   ├── c6
 │   │   │   ├── 58bc9ecd5ca3743a7f2af73e3cb200880e4ca9
-│   │   │   └── fdd071b5d4133824ae4d805a3034132830a1b2
+│   │   │   ├── fdd071b5d4133824ae4d805a3034132830a1b2
+│   │   │   └── ff4ab950a6815909770b034dd1fb97bc2dee26
 │   │   ├── c9
 │   │   │   └── d01403d430d6488151a043a2900df16ed34bea
 │   │   ├── ca
@@ -212,6 +250,7 @@
 │   │   │   ├── 35e2b0ab2faf9e7591dbb67e87e8d6404478db
 │   │   │   └── d741fa996c5bbaa1df39bde579aeb94d566f97
 │   │   ├── d2
+│   │   │   ├── 1c6578893b71e9cf50bce04ba25db118f00402
 │   │   │   └── 9d4b7042c941bf615d616e45558379af62b54a
 │   │   ├── d3
 │   │   │   └── 1cdb65bfa42c502c77dd260996fdbaf1a9bfbc
@@ -252,6 +291,7 @@
 │   │   ├── f0
 │   │   │   └── 4459e57bc6cab735716c70e1cdfcb0e445575d
 │   │   ├── f2
+│   │   │   ├── 8bd00d734db22dafcc631337799050b7b39835
 │   │   │   └── ae185cbfd16946a534d819e9eb03924abbcc49
 │   │   ├── f4
 │   │   │   ├── 8717464f7c7109a27d7a8085b4df1fe0f874bb
@@ -261,6 +301,8 @@
 │   │   │   └── daa2ccee05c02b3c2277dae6c41233a2faf888
 │   │   ├── f7
 │   │   │   └── d5dfaaf12001c80ec18598fc2a8897a0fc8439
+│   │   ├── f9
+│   │   │   └── 5d87b59952aed5ee84a081ce9b0915d94dbdbc
 │   │   ├── fc
 │   │   │   ├── 218ce3a7ee118273709d075ffe4264d61d4d02
 │   │   │   └── b741a341df889205f9868e01cdef51cc530ae9
@@ -340,6 +382,10 @@
 │   │   ├── _32c4-_66e9.js
 │   │   ├── app
 │   │   │   ├── api
+│   │   │   │   ├── analyze-recommendations
+│   │   │   │   │   └── route.js
+│   │   │   │   ├── analyze-task-complexity
+│   │   │   │   │   └── route.js
 │   │   │   │   ├── submit-assessment
 │   │   │   │   │   └── route.js
 │   │   │   │   ├── submit-job-analysis
@@ -355,12 +401,12 @@
 │   │   │   │   ├── processing
 │   │   │   │   │   ├── page.js
 │   │   │   │   │   └── page_client-reference-manifest.js
-│   │   │   │   ├── recommendations
-│   │   │   │   │   ├── page.js
-│   │   │   │   │   └── page_client-reference-manifest.js
 │   │   │   │   └── results
 │   │   │   │       ├── page.js
 │   │   │   │       └── page_client-reference-manifest.js
+│   │   │   ├── courses
+│   │   │   │   ├── page.js
+│   │   │   │   └── page_client-reference-manifest.js
 │   │   │   ├── favicon.ico
 │   │   │   │   └── route.js
 │   │   │   ├── newsletter
@@ -386,12 +432,21 @@
 │   │   │   ├── @radix-ui.js
 │   │   │   ├── @supabase.js
 │   │   │   ├── @swc.js
+│   │   │   ├── abort-controller.js
+│   │   │   ├── agentkeepalive.js
 │   │   │   ├── aria-hidden.js
 │   │   │   ├── class-variance-authority.js
 │   │   │   ├── clsx.js
+│   │   │   ├── event-target-shim.js
+│   │   │   ├── form-data-encoder.js
+│   │   │   ├── formdata-node.js
 │   │   │   ├── get-nonce.js
+│   │   │   ├── humanize-ms.js
 │   │   │   ├── lucide-react.js
+│   │   │   ├── ms.js
 │   │   │   ├── next.js
+│   │   │   ├── node-domexception.js
+│   │   │   ├── openai.js
 │   │   │   ├── react-remove-scroll-bar.js
 │   │   │   ├── react-remove-scroll.js
 │   │   │   ├── react-style-singleton.js
@@ -413,10 +468,10 @@
 │   │   │   │   │   ├── page.js
 │   │   │   │   │   ├── processing
 │   │   │   │   │   │   └── page.js
-│   │   │   │   │   ├── recommendations
-│   │   │   │   │   │   └── page.js
 │   │   │   │   │   └── results
 │   │   │   │   │       └── page.js
+│   │   │   │   ├── courses
+│   │   │   │   │   └── page.js
 │   │   │   │   ├── layout.js
 │   │   │   │   ├── newsletter
 │   │   │   │   │   └── page.js
@@ -437,29 +492,33 @@
 │   │   │   ├── 4473ecc91f70f139-s.p.woff
 │   │   │   └── 463dafcda517f24f-s.p.woff
 │   │   └── webpack
-│   │       ├── 3b190ae6b97772db.webpack.hot-update.json
-│   │       ├── 51445d0e027502ac.webpack.hot-update.json
+│   │       ├── 0f65c2ea47016eef.webpack.hot-update.json
+│   │       ├── 13766f572ee5feee.webpack.hot-update.json
+│   │       ├── 226d553d6cd8a69d.webpack.hot-update.json
 │   │       ├── 633457081244afec._.hot-update.json
-│   │       ├── 76c554b26ed9927f.webpack.hot-update.json
-│   │       ├── 82e5084bc32bf978.webpack.hot-update.json
-│   │       ├── 9199c8604a31989d.webpack.hot-update.json
+│   │       ├── a62edfeeedb40fb4.webpack.hot-update.json
+│   │       ├── acab9bc297c16d50.webpack.hot-update.json
 │   │       ├── app
-│   │       │   └── layout.d2ff3a4b632755b9.hot-update.js
-│   │       ├── bd0789c95bf33e29.webpack.hot-update.json
-│   │       ├── d2ff3a4b632755b9.webpack.hot-update.json
-│   │       ├── e07e8c0fec648303.webpack.hot-update.json
-│   │       ├── webpack.3b190ae6b97772db.hot-update.js
-│   │       ├── webpack.51445d0e027502ac.hot-update.js
-│   │       ├── webpack.76c554b26ed9927f.hot-update.js
-│   │       ├── webpack.82e5084bc32bf978.hot-update.js
-│   │       ├── webpack.9199c8604a31989d.hot-update.js
-│   │       ├── webpack.bd0789c95bf33e29.hot-update.js
-│   │       ├── webpack.d2ff3a4b632755b9.hot-update.js
-│   │       └── webpack.e07e8c0fec648303.hot-update.js
+│   │       │   └── layout.a62edfeeedb40fb4.hot-update.js
+│   │       ├── cc723b32ae0e08e1.webpack.hot-update.json
+│   │       ├── cd253f161d6d4e10.webpack.hot-update.json
+│   │       ├── d9531c0a23caa7cb.webpack.hot-update.json
+│   │       ├── webpack.0f65c2ea47016eef.hot-update.js
+│   │       ├── webpack.13766f572ee5feee.hot-update.js
+│   │       ├── webpack.226d553d6cd8a69d.hot-update.js
+│   │       ├── webpack.a62edfeeedb40fb4.hot-update.js
+│   │       ├── webpack.acab9bc297c16d50.hot-update.js
+│   │       ├── webpack.cc723b32ae0e08e1.hot-update.js
+│   │       ├── webpack.cd253f161d6d4e10.hot-update.js
+│   │       └── webpack.d9531c0a23caa7cb.hot-update.js
 │   ├── trace
 │   └── types
 │       ├── app
 │       │   ├── api
+│       │   │   ├── analyze-recommendations
+│       │   │   │   └── route.ts
+│       │   │   ├── analyze-task-complexity
+│       │   │   │   └── route.ts
 │       │   │   ├── submit-assessment
 │       │   │   │   └── route.ts
 │       │   │   ├── submit-job-analysis
@@ -472,10 +531,10 @@
 │       │   │   ├── page.ts
 │       │   │   ├── processing
 │       │   │   │   └── page.ts
-│       │   │   ├── recommendations
-│       │   │   │   └── page.ts
 │       │   │   └── results
 │       │   │       └── page.ts
+│       │   ├── courses
+│       │   │   └── page.ts
 │       │   ├── layout.ts
 │       │   ├── newsletter
 │       │   │   └── page.ts
@@ -490,6 +549,10 @@
 │   │   └── page.tsx
 │   ├── api
 │   │   ├── .DS_Store
+│   │   ├── analyze-recommendations
+│   │   │   └── route.ts
+│   │   ├── analyze-task-complexity
+│   │   │   └── route.ts
 │   │   ├── submit-assessment
 │   │   │   └── route.ts
 │   │   ├── submit-job-analysis
@@ -563,4 +626,4 @@
 ├── tailwind.config.ts
 └── tsconfig.json
 
-192 directories, 372 files
+215 directories, 412 files

@@ -11,19 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Slider } from '@/components/ui/slider'
-import { Progress } from '@/components/ui/progress'
-import { toast } from '@/hooks/use-toast'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { AlertCircle } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
 
 interface FormErrors {
   ageRange?: string;
@@ -32,7 +25,7 @@ interface FormErrors {
   jobTitle?: string;
 }
 
-export default function AssessmentQuestionnaire() {
+export default function AssessmentPage() {
   const router = useRouter()
   const [formData, setFormData] = useState({
     ageRange: '',
@@ -40,14 +33,13 @@ export default function AssessmentQuestionnaire() {
     educationLevel: '',
     industry: '',
     jobTitle: '',
-    yearsOfExperience: 0,
   })
   const [progress, setProgress] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
 
-  const handleInputChange = (name: string, value: string | number) => {
+  const handleInputChange = (name: string, value: string) => {
     setFormData(prev => ({ ...prev, [name]: value }))
     updateProgress()
     
@@ -57,15 +49,10 @@ export default function AssessmentQuestionnaire() {
     }
   }
 
-  const handleSliderChange = (value: number[]) => {
-    setFormData(prev => ({ ...prev, yearsOfExperience: value[0] }))
-    updateProgress()
-  }
-
   const updateProgress = () => {
     const requiredFields = ['ageRange', 'educationLevel', 'industry', 'jobTitle']
-    const filledRequiredFields = requiredFields.filter(field => formData[field as keyof typeof formData]).length
-    setProgress((filledRequiredFields / requiredFields.length) * 100)
+    const filledFields = requiredFields.filter(field => formData[field as keyof typeof formData]).length
+    setProgress((filledFields / requiredFields.length) * 100)
   }
 
   const validateForm = (): boolean => {
@@ -90,9 +77,6 @@ export default function AssessmentQuestionnaire() {
     if (!formData.jobTitle) {
       newErrors.jobTitle = 'Please enter your job title'
       isValid = false
-    } else if (formData.jobTitle.length < 2) {
-      newErrors.jobTitle = 'Job title must be at least 2 characters long'
-      isValid = false
     }
 
     setErrors(newErrors)
@@ -105,8 +89,7 @@ export default function AssessmentQuestionnaire() {
     
     if (!validateForm()) {
       toast({
-        title: "Form Validation Error",
-        description: "Please fill in all required fields correctly.",
+        title: "Please fill in all required fields",
         variant: "destructive",
       })
       return
@@ -129,14 +112,12 @@ export default function AssessmentQuestionnaire() {
         throw new Error(data.message || 'Something went wrong')
       }
 
-      if (data.success) {
-        sessionStorage.setItem('assessmentId', data.assessmentId)
-        router.push('/assessment/job-analysis')
-      } else {
-        throw new Error(data.message || "Failed to submit assessment")
-      }
+      // Store the assessment ID for the next steps
+      sessionStorage.setItem('assessmentId', data.assessmentId)
+      // Navigate to the job questions page
+      router.push('/assessment/questions')
     } catch (error) {
-      console.error('Error submitting assessment:', error)
+      console.error('Error:', error)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An unexpected error occurred",
@@ -151,9 +132,9 @@ export default function AssessmentQuestionnaire() {
     <div className="min-h-screen bg-background p-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold text-primary">Professional Information</CardTitle>
+          <CardTitle>Step 1: Tell Us About Yourself</CardTitle>
           <CardDescription>
-            Please provide some information about your professional background.
+            This information helps us provide more accurate insights about AI's impact on your career.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -192,9 +173,6 @@ export default function AssessmentQuestionnaire() {
                   <SelectItem value="55+">55+</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.ageRange && hasAttemptedSubmit && (
-                <p className="text-sm text-red-500 mt-1">{errors.ageRange}</p>
-              )}
             </div>
 
             <div className="space-y-2">
@@ -233,9 +211,6 @@ export default function AssessmentQuestionnaire() {
                   <SelectItem value="phd">Ph.D. or Doctorate</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.educationLevel && hasAttemptedSubmit && (
-                <p className="text-sm text-red-500 mt-1">{errors.educationLevel}</p>
-              )}
             </div>
 
             <div className="space-y-2">
@@ -253,12 +228,11 @@ export default function AssessmentQuestionnaire() {
                   <SelectItem value="healthcare">Healthcare</SelectItem>
                   <SelectItem value="finance">Finance</SelectItem>
                   <SelectItem value="education">Education</SelectItem>
+                  <SelectItem value="retail">Retail</SelectItem>
+                  <SelectItem value="manufacturing">Manufacturing</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
-              {errors.industry && hasAttemptedSubmit && (
-                <p className="text-sm text-red-500 mt-1">{errors.industry}</p>
-              )}
             </div>
 
             <div className="space-y-2">
@@ -268,23 +242,8 @@ export default function AssessmentQuestionnaire() {
                 name="jobTitle"
                 value={formData.jobTitle}
                 onChange={(e) => handleInputChange('jobTitle', e.target.value)}
-                placeholder="Your Job Title"
+                placeholder="Your Current Job Title"
                 className={errors.jobTitle && hasAttemptedSubmit ? 'border-red-500' : ''}
-              />
-              {errors.jobTitle && hasAttemptedSubmit && (
-                <p className="text-sm text-red-500 mt-1">{errors.jobTitle}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="yearsOfExperience">Years of Experience: {formData.yearsOfExperience}</Label>
-              <Slider
-                id="yearsOfExperience"
-                min={0}
-                max={40}
-                step={1}
-                value={[formData.yearsOfExperience]}
-                onValueChange={handleSliderChange}
               />
             </div>
 
@@ -293,7 +252,7 @@ export default function AssessmentQuestionnaire() {
               className="w-full" 
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Submitting..." : "Next: Job Analysis"}
+              {isSubmitting ? "Submitting..." : "Next: Job Questions"}
             </Button>
           </form>
         </CardContent>
