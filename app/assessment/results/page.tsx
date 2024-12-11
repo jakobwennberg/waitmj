@@ -1,3 +1,5 @@
+// app/assessment/results/page.tsx
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -7,23 +9,52 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AlertCircle, Brain, Users, Zap, ShieldAlert, Lightbulb, ChevronRight } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { 
+  AlertCircle, Brain, TrendingUp, BookOpen, 
+  Lightbulb, ChevronRight, Zap, ShieldAlert 
+} from 'lucide-react'
 import { toast } from '@/hooks/use-toast'
 
-interface Recommendations {
-  strengths: string[];
-  risks: string[];
-  recommendations: string[];
+interface FormattedSection {
+  title: string;
+  bullets: string[];
 }
+
+interface ProcessedInsights {
+  industryTrends: FormattedSection[];
+  automationData: FormattedSection[];
+  skillsInsights: FormattedSection[];
+}
+
+const ResultsSection = ({ title, sections }: { title: string, sections: FormattedSection[] }) => (
+  <div className="space-y-4">
+    <h3 className="text-xl font-semibold">{title}</h3>
+    {sections.map((section, idx) => (
+      <div key={idx} className="space-y-2">
+        <h4 className="font-medium text-muted-foreground">{section.title}</h4>
+        <ul className="space-y-2">
+          {section.bullets.map((bullet, bulletIdx) => (
+            <li key={bulletIdx} className="flex items-start gap-2">
+              <div className="mt-1.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+              </div>
+              <span className="text-sm">{bullet}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+);
 
 export default function ResultsPage() {
   const router = useRouter()
   const [replaceabilityScore, setReplaceabilityScore] = useState<number | null>(null)
-  const [recommendations, setRecommendations] = useState<Recommendations | null>(null)
-  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false)
+  const [insights, setInsights] = useState<ProcessedInsights | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Get assessment ID and score from sessionStorage
     const assessmentId = sessionStorage.getItem('assessmentId')
     
     if (!assessmentId) {
@@ -31,16 +62,12 @@ export default function ResultsPage() {
       return
     }
     
-    // Fetch AI recommendations and score
     const fetchResults = async () => {
-      setIsLoadingRecommendations(true)
       try {
         const response = await fetch('/api/analyze-recommendations', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ assessmentId }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ assessmentId })
         })
 
         const data = await response.json()
@@ -51,7 +78,7 @@ export default function ResultsPage() {
 
         if (data.success) {
           setReplaceabilityScore(data.score)
-          setRecommendations(data.recommendations)
+          setInsights(data.insights)
         }
       } catch (error) {
         console.error('Error:', error)
@@ -61,19 +88,41 @@ export default function ResultsPage() {
           variant: "destructive",
         })
       } finally {
-        setIsLoadingRecommendations(false)
+        setIsLoading(false)
       }
     }
 
     fetchResults()
   }, [router])
 
-  if (!replaceabilityScore) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Loading Your Results...</h1>
-        </div>
+        <Card className="w-full max-w-md">
+          <CardContent className="py-6">
+            <div className="space-y-4 text-center">
+              <Brain className="h-12 w-12 mx-auto animate-pulse text-primary" />
+              <CardTitle>Analyzing Your Results</CardTitle>
+              <CardDescription>
+                Please wait while we process your assessment data...
+              </CardDescription>
+              <Progress value={100} className="animate-pulse" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
+  if (!replaceabilityScore || !insights) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Alert variant="destructive" className="max-w-md">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Unable to load your results. Please try taking the assessment again.
+          </AlertDescription>
+        </Alert>
       </div>
     )
   }
@@ -81,15 +130,15 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto space-y-8">
+        {/* Score Card */}
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-3xl">Your AI Replaceability Score</CardTitle>
             <CardDescription>
-              Based on your responses, here's how likely your job is to be automated by AI
+              Based on your responses and our AI-powered analysis
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Score Display */}
             <div className="flex justify-center mb-8">
               <div className="relative w-48 h-48">
                 <svg className="w-full h-full" viewBox="0 0 100 100">
@@ -119,112 +168,142 @@ export default function ResultsPage() {
                     }}
                   />
                 </svg>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
                   <div className="text-4xl font-bold">{replaceabilityScore}%</div>
+                  <div className="text-sm text-muted-foreground">Risk Score</div>
                 </div>
               </div>
             </div>
 
-            <p className="text-center text-muted-foreground">
-              {replaceabilityScore > 75 ? (
-                "Your role shows high potential for AI automation. Consider upskilling in areas that complement AI."
-              ) : replaceabilityScore > 50 ? (
-                "Your job has moderate automation potential. Focus on developing skills that AI cannot easily replicate."
-              ) : replaceabilityScore > 25 ? (
-                "Your role shows lower automation risk. Continue developing your unique human skills."
-              ) : (
-                "Your job has very low automation potential. Your human skills are highly valuable."
-              )}
-            </p>
+            <Card className="bg-muted">
+              <CardContent className="p-4">
+                <p className="text-center">
+                  {replaceabilityScore > 75 ? (
+                    <span className="text-red-500">High Risk: Your role shows significant potential for AI automation. Immediate action recommended.</span>
+                  ) : replaceabilityScore > 50 ? (
+                    <span className="text-yellow-500">Moderate Risk: Your job has some automation potential. Consider upskilling in key areas.</span>
+                  ) : replaceabilityScore > 25 ? (
+                    <span className="text-green-500">Low Risk: Your role shows resilience to automation. Continue developing your unique skills.</span>
+                  ) : (
+                    <span className="text-green-600">Minimal Risk: Your job demonstrates strong resistance to AI automation.</span>
+                  )}
+                </p>
+              </CardContent>
+            </Card>
           </CardContent>
         </Card>
 
-        <Tabs defaultValue="analysis" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="analysis">Analysis</TabsTrigger>
-            <TabsTrigger value="strengths">Strengths</TabsTrigger>
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+        {/* Analysis Tabs */}
+        <Tabs defaultValue="insights" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="insights">Analysis</TabsTrigger>
+            <TabsTrigger value="industry">Industry</TabsTrigger>
+            <TabsTrigger value="automation">Automation</TabsTrigger>
+            <TabsTrigger value="skills">Skills</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="analysis">
+          <TabsContent value="insights">
             <Card>
               <CardHeader>
-                <CardTitle>Key Factors Analysis</CardTitle>
-                <CardDescription>How different aspects of your job contribute to your score</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5" />
+                  Complete Analysis
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive overview of your assessment results
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {isLoadingRecommendations ? (
-                  <p>Analyzing factors...</p>
-                ) : (
-                  <div className="space-y-4">
-                    {recommendations?.risks.map((risk, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex items-center gap-2">
-                          <AlertCircle className="h-4 w-4 text-primary" />
-                          <span className="font-medium">{risk}</span>
-                        </div>
-                        <Progress value={Math.random() * 100} />
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <CardContent className="space-y-8">
+                <ResultsSection 
+                  title="Industry Trends" 
+                  sections={insights.industryTrends}
+                />
+                <ResultsSection 
+                  title="Automation Insights" 
+                  sections={insights.automationData}
+                />
+                <ResultsSection 
+                  title="Skills Recommendations" 
+                  sections={insights.skillsInsights}
+                />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="strengths">
+          <TabsContent value="industry">
             <Card>
               <CardHeader>
-                <CardTitle>Your Professional Strengths</CardTitle>
-                <CardDescription>Areas where you demonstrate strong capabilities</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Industry Analysis
+                </CardTitle>
+                <CardDescription>
+                  Current trends and future predictions for your industry
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                {isLoadingRecommendations ? (
-                  <p>Analyzing strengths...</p>
-                ) : (
-                  <ul className="space-y-4">
-                    {recommendations?.strengths.map((strength, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <Lightbulb className="h-5 w-5 text-primary mt-0.5" />
-                        <span>{strength}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ResultsSection 
+                  title="Industry Trends" 
+                  sections={insights.industryTrends}
+                />
               </CardContent>
             </Card>
           </TabsContent>
 
-          <TabsContent value="recommendations">
+          <TabsContent value="automation">
             <Card>
               <CardHeader>
-                <CardTitle>Personalized Recommendations</CardTitle>
-                <CardDescription>Steps to enhance your career resilience</CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <ShieldAlert className="h-5 w-5" />
+                  Automation Impact
+                </CardTitle>
+                <CardDescription>
+                  Analysis of automation risks and vulnerabilities
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                {isLoadingRecommendations ? (
-                  <p>Generating recommendations...</p>
-                ) : (
-                  <ul className="space-y-4">
-                    {recommendations?.recommendations.map((recommendation, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <ChevronRight className="h-5 w-5 text-primary mt-0.5" />
-                        <span>{recommendation}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <ResultsSection 
+                  title="Automation Insights" 
+                  sections={insights.automationData}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="skills">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Lightbulb className="h-5 w-5" />
+                  Skills Development
+                </CardTitle>
+                <CardDescription>
+                  Recommended skills and professional development paths
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ResultsSection 
+                  title="Skills Recommendations" 
+                  sections={insights.skillsInsights}
+                />
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
 
+        {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button asChild>
-            <Link href="/courses">Explore Recommended Courses</Link>
+          <Button asChild size="lg">
+            <Link href="/courses">
+              <BookOpen className="mr-2 h-4 w-4" />
+              View Recommended Courses
+            </Link>
           </Button>
-          <Button variant="outline" asChild>
-            <Link href="/newsletter">Stay Updated</Link>
+          <Button variant="outline" asChild size="lg">
+            <Link href="/newsletter">
+              <TrendingUp className="mr-2 h-4 w-4" />
+              Stay Updated
+            </Link>
           </Button>
         </div>
       </div>
