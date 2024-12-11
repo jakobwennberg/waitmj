@@ -4,17 +4,17 @@ import { Star } from 'lucide-react'
 
 const testimonials = [
   {
-    name: "Sarah Johnson",
-    role: "Marketing Manager",
-    company: "TechCorp",
+    name: "Alice Jönsson",
+    role: "Marketing Project Lead",
+    company: "Stronger AB",
     content: "The AI job assessment opened my eyes to the skills I need to focus on. It's given me a clear path for professional development.",
     avatar: "/api/placeholder/40/40",
     rating: 5
   },
   {
-    name: "Michael Chen",
+    name: "Mikael Rosenqvist",
     role: "Software Developer",
-    company: "InnovateX",
+    company: "Samsung",
     content: "As a developer, I was skeptical about AI's impact on my job. This assessment provided valuable insights into future-proofing my career.",
     avatar: "/api/placeholder/40/40",
     rating: 5
@@ -22,10 +22,10 @@ const testimonials = [
   {
     name: "Emily Rodriguez",
     role: "HR Specialist",
-    company: "GlobalHR",
+    company: "AstraZeneca",
     content: "The personalized recommendations were spot-on. I've already started implementing some of the suggested strategies in my role.",
     avatar: "/api/placeholder/40/40",
-    rating: 4
+    rating: 5
   }
 ]
 

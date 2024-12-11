@@ -126,7 +126,14 @@ export async function retrieveRelevantDocuments(query: LangbaseQuery): Promise<P
         reader.releaseLock();
       }
 
-      // Split and clean the response
+      // Clean and process the response
+      fullResponse = fullResponse
+        .replace(/RAG docs WAITMJ\.md/g, '')
+        .replace(/Sources:.*/g, '')
+        .replace(/\[.*?\]/g, '')
+        .trim();
+
+      // Split into main sections
       const sections = fullResponse
         .split(/\d\.\s+/g)
         .filter(Boolean)
@@ -163,10 +170,20 @@ export async function retrieveRelevantDocuments(query: LangbaseQuery): Promise<P
   throw new Error('Failed to get response after all retry attempts');
 }
 
+function cleanText(text: string): string {
+  return text
+    .replace(/\*\*/g, '')         // Remove asterisks
+    .replace(/^[-•]\s*/, '')      // Clean bullet points
+    .replace(/\[.*?\]/g, '')      // Remove citations
+    .trim();
+}
+
 function parseSection(text: string): FormattedSection[] {
-  const lines = text.split('\n')
+  const lines = text
+    .split('\n')
     .map(line => line.trim())
-    .filter(line => line && !line.startsWith('[') && !line.includes('Sources:'));
+    .filter(Boolean)
+    .map(cleanText);
 
   const sections: FormattedSection[] = [];
   let currentSection: FormattedSection | null = null;
@@ -177,22 +194,20 @@ function parseSection(text: string): FormattedSection[] {
         sections.push(currentSection);
       }
       currentSection = {
-        title: line.replace(/^[*-]\s*|\s*:\s*$/g, ''),
+        title: line.replace(/\s*:\s*$/, ''),
         bullets: []
       };
-    } else if (line.startsWith('-') && currentSection) {
-      const bullet = line.substring(1)
-        .trim()
-        .replace(/^\*\*|\*\*$/g, '')
-        .replace(/\[.*?\]/g, '')
-        .trim();
-      if (bullet) {
-        currentSection.bullets.push(bullet);
+    } else if (currentSection && line.length > 0) {
+      // Add the line as a bullet point if it's not a source reference
+      if (!line.toLowerCase().includes('rag docs') && 
+          !line.toLowerCase().includes('sources:') &&
+          !line.toLowerCase().includes('waitmj')) {
+        currentSection.bullets.push(line);
       }
     }
   }
 
-  if (currentSection) {
+  if (currentSection && currentSection.bullets.length > 0) {
     sections.push(currentSection);
   }
 
