@@ -72,8 +72,8 @@ export default function EmailCollectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <Card className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="max-w-2xl w-full">
         <CardHeader>
           <CardTitle>Would you like personalized insights?</CardTitle>
           <CardDescription>

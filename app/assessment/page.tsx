@@ -129,8 +129,8 @@ export default function AssessmentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <Card className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="max-w-2xl w-full">
         <CardHeader>
           <CardTitle>Step 1: Tell Us About Yourself</CardTitle>
           <CardDescription>

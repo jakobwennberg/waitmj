@@ -11,7 +11,6 @@ export default function LandingPage() {
           <div className="space-x-4">
             <Link href="/about" className="text-muted-foreground hover:text-primary">About Us</Link>
             <Link href="/how-it-works" className="text-muted-foreground hover:text-primary">How It Works</Link>
-            <Link href="/testimonials" className="text-muted-foreground hover:text-primary">Testimonials</Link>
             <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
           </div>
         </nav>

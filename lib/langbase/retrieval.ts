@@ -2,7 +2,7 @@
 
 import { LANGBASE_API } from './config';
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 2;
 const BASE_DELAY = 2000;
 
 interface LangbaseQuery {

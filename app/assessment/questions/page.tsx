@@ -87,8 +87,6 @@ export default function JobQuestionsPage() {
     }
   }
 
-  const progress = ((currentQuestion + 1) / questions.length) * 100
-
   const handleSubmit = async () => {
     if (Object.keys(answers).length < questions.length) {
       toast({
@@ -133,6 +131,7 @@ export default function JobQuestionsPage() {
   }
 
   const currentQ = questions[currentQuestion]
+  const progress = ((currentQuestion + 1) / questions.length) * 100
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
@@ -153,17 +152,17 @@ export default function JobQuestionsPage() {
             </div>
 
             <RadioGroup
-              value={answers[currentQ.id]}
+              value={answers[currentQ.id] || ''}
               onValueChange={handleAnswer}
               className="space-y-3"
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="yes" id="yes" />
-                <Label htmlFor="yes">Yes</Label>
+                <RadioGroupItem value="yes" id={`yes-${currentQ.id}`} />
+                <Label htmlFor={`yes-${currentQ.id}`}>Yes</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="no" id="no" />
-                <Label htmlFor="no">No</Label>
+                <RadioGroupItem value="no" id={`no-${currentQ.id}`} />
+                <Label htmlFor={`no-${currentQ.id}`}>No</Label>
               </div>
             </RadioGroup>
 
