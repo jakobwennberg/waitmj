@@ -87,6 +87,8 @@ export default function JobQuestionsPage() {
     }
   }
 
+  const progress = ((currentQuestion + 1) / questions.length) * 100
+
   const handleSubmit = async () => {
     if (Object.keys(answers).length < questions.length) {
       toast({
@@ -117,7 +119,6 @@ export default function JobQuestionsPage() {
         throw new Error(data.message || 'Something went wrong')
       }
 
-      // Navigate to email collection
       router.push('/assessment/email')
     } catch (error) {
       console.error('Error:', error)
@@ -132,11 +133,10 @@ export default function JobQuestionsPage() {
   }
 
   const currentQ = questions[currentQuestion]
-  const progress = ((currentQuestion + 1) / questions.length) * 100
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <Card className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="max-w-2xl w-full">
         <CardHeader>
           <CardTitle>Step 2: Your Job Details</CardTitle>
           <CardDescription>
@@ -176,7 +176,7 @@ export default function JobQuestionsPage() {
                 Previous
               </Button>
 
-              <div className="flex-1" /> {/* Spacer */}
+              <div className="flex-1" />
 
               {currentQuestion < questions.length - 1 ? (
                 <Button 
