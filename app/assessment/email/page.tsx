@@ -13,7 +13,7 @@ import { Mail, Shield } from 'lucide-react'
 export default function EmailCollectionPage() {
   const router = useRouter()
   const [email, setEmail] = useState('')
-  const [consent, setConsent] = useState(false)
+  const [consent, setConsent] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,7 +102,7 @@ export default function EmailCollectionPage() {
                 <Checkbox
                   id="consent"
                   checked={consent}
-                  onCheckedChange={(checked) => setConsent(checked as boolean)}
+                  onCheckedChange={(checked) => setConsent(checked === true)}
                   disabled={!email}
                 />
                 <div className="grid gap-1.5 leading-none">
@@ -113,7 +113,7 @@ export default function EmailCollectionPage() {
                     Email communications consent
                   </Label>
                   <p className="text-sm text-muted-foreground">
-                    I agree to receive personalized insights and updates about AI's impact on my industry.
+                    I agree to receive personalized insights and updates about AI&apos;s impact on my industry.
                   </p>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export default function EmailCollectionPage() {
             <div className="flex flex-col space-y-2">
               <Button 
                 type="submit" 
-                disabled={isSubmitting || (email && !consent)}
+                disabled={isSubmitting || (!!email && !consent)}
               >
                 {isSubmitting ? "Saving..." : "Continue with Email"}
               </Button>

@@ -61,3 +61,29 @@ export function calculateJobScore(answers: Record<number, string>): number {
   // Ensure score stays within 0-100 range
   return Math.max(0, Math.min(100, score))
 }
+
+interface JobAnalysisData {
+  humanInteraction: number
+  creativityLevel: number
+  decisionMaking: number
+  taskComplexityScore?: number
+}
+
+export function calculateFinalScore(data: JobAnalysisData): number {
+  let score = 50 // Base score
+  
+  // Add complexity score impact
+  score += (data.taskComplexityScore || 0) * 0.2
+  
+  // Human interaction impact (-5 to +5)
+  score += ((data.humanInteraction - 5) / 5) * -10
+  
+  // Creativity impact (-5 to +5)
+  score += ((data.creativityLevel - 5) / 5) * -10
+  
+  // Decision making impact (-5 to +5)
+  score += ((data.decisionMaking - 5) / 5) * -10
+  
+  // Ensure score stays within 0-100 range
+  return Math.max(0, Math.min(100, score))
+}
