@@ -2,23 +2,15 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import TestimonialsSection from '@/components/TestimonialsSection'
+import { Header } from '@/components/header'
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="py-6 px-4 sm:px-6 lg:px-8">
-        <nav className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-primary">WILL AI TAKE MY JOB?</div>
-          <div className="space-x-4">
-            <Link href="/about" className="text-muted-foreground hover:text-primary">About Us</Link>
-            <Link href="/how-it-works" className="text-muted-foreground hover:text-primary">How It Works</Link>
-            <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <main className="flex-grow flex flex-col items-center px-4 sm:px-6 lg:px-8 text-center">
-        <div className="flex-grow flex flex-col items-center justify-center mt-40">
+        <div className="flex-grow flex flex-col items-center justify-center max-w-4xl mx-auto w-full mt-8 md:mt-40">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-6">
             Is Your Job Safe from AI Automation?
           </h1>
@@ -26,7 +18,7 @@ export default function LandingPage() {
             Discover the impact of AI on your career with our cutting-edge assessment tool.
             Get personalized insights and recommendations to future-proof your job.
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" asChild className="w-full sm:w-auto">
             <Link href="/assessment">Start Your Free Assessment Now</Link>
           </Button>
           <p className="mt-4 text-sm text-muted-foreground">
