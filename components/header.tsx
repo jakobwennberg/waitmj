@@ -12,83 +12,60 @@ import {
 } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
 
-const navItems = [
-  { href: '/about', label: 'About Us' },
-  { href: '/how-it-works', label: 'How It Works' },
-  { href: '/contact', label: 'Contact' },
-]
-
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center justify-between w-full">
-          {/* Logo - smaller on mobile */}
-          <Link href="/" className="flex items-center">
-            <span className="text-lg md:text-xl font-bold whitespace-nowrap">WILL AI TAKE MY JOB?</span>
-          </Link>
+    <header className="py-6 px-4 sm:px-6 lg:px-8">
+      <nav className="flex justify-between items-center">
+        {/* Logo */}
+        <div className="text-2xl font-bold">WILL AI TAKE MY JOB?</div>
 
-          {/* Desktop Navigation - completely hidden on mobile */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item, index) => (
-              <Link
-                key={index}
-                href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === item.href
-                    ? 'text-primary'
-                    : 'text-muted-foreground'
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Button asChild>
-              <Link href="/assessment">Start Assessment</Link>
-            </Button>
-          </nav>
-
-          {/* Mobile Menu Button - only shown on mobile */}
-          <div className="flex md:hidden">
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="ml-2"
-                >
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[250px] sm:w-[300px]">
-                <nav className="flex flex-col space-y-6 mt-12">
-                  {navItems.map((item, index) => (
-                    <Link
-                      key={index}
-                      href={item.href}
-                      className={`text-lg font-medium transition-colors hover:text-primary ${
-                        pathname === item.href
-                          ? 'text-primary'
-                          : 'text-muted-foreground'
-                      }`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                  <Button asChild className="w-full" onClick={() => setIsOpen(false)}>
-                    <Link href="/assessment">Start Assessment</Link>
-                  </Button>
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
+        {/* Desktop Navigation - Visible on desktop, hidden on mobile */}
+        <div className="hidden md:flex space-x-4">
+          <Link href="/about" className="text-muted-foreground hover:text-primary">About Us</Link>
+          <Link href="/how-it-works" className="text-muted-foreground hover:text-primary">How It Works</Link>
+          <Link href="/contact" className="text-muted-foreground hover:text-primary">Contact</Link>
         </div>
-      </div>
+
+        {/* Mobile Menu Button - Only visible on mobile */}
+        <div className="md:hidden">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <nav className="flex flex-col space-y-4 mt-8">
+                <Link 
+                  href="/about" 
+                  className="text-lg font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  About Us
+                </Link>
+                <Link 
+                  href="/how-it-works" 
+                  className="text-lg font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  How It Works
+                </Link>
+                <Link 
+                  href="/contact" 
+                  className="text-lg font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Contact
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
     </header>
   )
 }
