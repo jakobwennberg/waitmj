@@ -21,11 +21,11 @@ const testimonials = [
     rating: 5
   },
   {
-    name: "Emily Rodriguez",
-    role: "HR Specialist",
-    company: "AstraZeneca",
+    name: "August Pernvik",
+    role: "CFO",
+    company: "Iron Brothers",
     content: "The personalized recommendations were spot-on. I've already started implementing some of the suggested strategies in my role.",
-    initials: "ER",
+    initials: "AP",
     rating: 5
   }
 ]
